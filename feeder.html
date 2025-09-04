@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SingleMind Admin</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #0d1b2a;
+        color: white;
+        margin: 0;
+        padding: 0;
+    }
+
+    header {
+        background: #194A8D;
+        padding: 15px 20px;
+        text-align: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+        letter-spacing: 2px;
+    }
+
+    main {
+        max-width: 900px;
+        margin: 30px auto;
+        padding: 20px;
+        background: #14213d;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+
+    h2 {
+        border-bottom: 2px solid #194A8D;
+        padding-bottom: 5px;
+        margin-bottom: 15px;
+        color: #90e0ef;
+    }
+
+    /* Add form */
+    form {
+        background: #1b263b;
+        padding: 15px;
+        border-radius: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 25px;
+    }
+
+    form input, form textarea {
+        flex: 1 1 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background: #0d1b2a;
+        color: white;
+    }
+
+    form button {
+        background: #194A8D;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background 0.3s;
+    }
+
+    form button:hover {
+        background: #1451b8;
+    }
+
+    /* Data list */
+    .data-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .data-item {
+        background: #1b263b;
+        padding: 15px;
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+    }
+
+    .data-item h3 {
+        margin: 0;
+        font-size: 1.2rem;
+        color: #90e0ef;
+    }
+
+    .data-item p {
+        margin: 5px 0 0;
+        font-size: 0.9rem;
+        color: #ddd;
+    }
+
+    .delete-btn {
+        background: crimson;
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background 0.3s;
+        
+    }
+
+
+    .delete-btn:hover {
+        background: darkred;
+    }
+</style>
+</head>
+<body>
+
+<header>SingleMind News - Admin Panel</header>
+
+<main>
+    <h2>Add New Data</h2>
+    <form id="rssLinkForm">
+        <input type="url" placeholder="RSS Url" required>
+        <textarea placeholder="Description" rows="3" required name="desc"></textarea>
+        <button type="submit">Add Data</button>
+    </form>
+
+    <h2>Existing Data</h2>
+    <div class="data-list" id="dataList">
+        <!-- Example items -->
+        <div class="data-item">
+            <div>
+                <h3>Sample Title</h3>
+                <p>This is a sample description.</p>
+            </div>
+            <button class="delete-btn">Remove</button>
+        </div>
+        <div class="data-item">
+            <div>
+                <h3>Another Title</h3>
+                <p>Another example content.</p>
+            </div>
+            <button class="delete-btn">Remove</button>
+        </div>
+    </div>
+</main>
+
+<script type="module">
+    // const  loggedInUser = localStorage.getItem("loggedInUser");
+const loggedInUser="manoj"
+console.log("checking session ",loggedInUser)
+
+
+  //**********************************firebase sdks ****************************************
+  // Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+  
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyC5WPwC7kSpMvVzP8uSwOOOhAx6p52B3z8",
+    authDomain: "singlemind-97876.firebaseapp.com",
+    projectId: "singlemind-97876",
+    storageBucket: "singlemind-97876.firebasestorage.app",
+    messagingSenderId: "445373825721",
+    appId: "1:445373825721:web:b5ab921e6a7ad577101168"
+  };
+//***********************************firebase sdk end***********************************
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+   
+//*****************adding data ****************
+
+const form1=document.querySelector("#rssLinkForm")
+form1.addEventListener("submit",async (e)=>{
+  e.preventDefault()
+  let url=document.querySelector("form input[type=url]")
+  let desc=document.querySelector("form textarea[name=desc]")
+  console.log(url.value,desc.value)
+  const obj={
+    url:url.value,
+    desc:desc.value
+  }
+
+  if (!url.value && !desc.value) return alert("Please fill in both fields");
+  const k=doc(db,"users",loggedInUser)
+        try {
+        await updateDoc(k, {
+        urls: arrayUnion(obj)
+        
+        });
+        alert("successfully added")
+        url.value=""
+        desc.value=""
+        loadData()
+        
+
+        } catch (error) {
+        console.log("Updation failed!!!",error)
+
+        }
+
+
+})
+
+const dataItem=document.querySelector("#dataList")
+
+function renderItem(item){
+    const div=document.createElement("div")
+    div.className="data-item"
+    div.innerHTML=`
+     <div>
+        <h3>${item.url}</h3>
+        <p>${item.desc}</p>
+    </div>
+    <button class="delete-btn">Remove</button>
+    `
+    //changing formar as per firestore
+    const fireFormat={
+        desc:item.desc,
+        url:item.url
+    }
+    div.querySelector(".delete-btn").addEventListener("click",()=>{removeItem(fireFormat)})
+    dataItem.append(div)
+
+}
+async function removeItem(item) {
+    const docRef = doc(db, "users", loggedInUser);
+    await updateDoc(docRef, {
+        urls: arrayRemove(item)
+    });
+    alert("removing ")
+    loadData();
+}
+
+async function  loadData(){
+
+    dataItem.innerHTML=""
+     const docRef = doc(db, "users", loggedInUser);
+     const docSnap = await getDoc(docRef);
+     const urlArray=docSnap.data().urls
+     urlArray.forEach(element => {
+        renderItem(element)
+     });
+
+
+}
+loadData()
+
+
+
+</script>
+
+</body>
+</html>

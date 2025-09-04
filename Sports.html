@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SingleMind News</title>
+  <link rel="stylesheet" href="style.css" />
+
+</head>
+<body>
+  <div class="content-wrapper">
+        <header>
+          <!-- <h1>📰 SingleMind News</h1> -->
+          <img src="./images/singlemind.png" alt="singlemindimg">
+       
+
+
+          <nav class="navbar">
+          <ul>
+            <li><a href="#" class="active">Home</a></li>
+
+            <li><a href="World.html">World</a></li>
+            <li><a href="Technology.html">Technology</a></li>
+            <li><a href="Business.html">Business</a></li>
+            <li><a href="Science.html">Science</a></li>
+            <li><a href="Health.html">Health</a></li>
+            <li><a href="Sports.html">Sports</a></li>
+            
+
+          </ul>
+        </nav>
+        
+
+        <div class="brain"><img src="./images/brain.png" alt="brainimg" class="brainimg"><p>More</p></div>
+             <div class="menu">
+          <a href="./feeder.html">Feeder</a>
+          <a href="#">About</a>
+          <a href="#">Account</a>
+          <a href="#">Contact</a>
+          </div>   
+        </header>
+
+      
+
+        <main id="news-container">
+          
+          <!-- <canvas id="newsCanvas" width="700" height="150"></canvas> -->
+         
+
+
+            <div class="table-wrapper">
+              <table id="newsTable">
+                <thead>
+                  <tr>
+                    <th>Image</th>
+                    <th>Title</th>
+                    <th>Summary</th>
+                    <th>Category</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- JS will insert rows -->
+
+                  <script>
+   
+
+        
+                  </script>
+
+                </tbody>
+              </table>
+            </div>
+
+        </main>
+
+        <footer>
+          <p>&copy; 2025 SingleMind News. All rights reserved.</p>
+        </footer> 
+      
+
+  </div>
+
+<script>
+   // Canvas Output
+                    const canvas = document.getElementById("newsCanvas");
+                    const ctx = canvas.getContext("2d");
+                    ctx.font = "20px Segoe UI";
+                    ctx.fillStyle = "#000";
+                    ctx.fillText("Welcome to SingleMind News!", 20, 50);
+                    ctx.fillStyle = "red";
+                    ctx.fillText("No Ads. No Distractions. Just News.", 20, 100);
+</script>
+
+<script type="module">
+const  loggedInUser = localStorage.getItem("loggedInUser");
+// const loggedInUser="manoj"
+console.log("checking session ",loggedInUser)
+
+
+  //**********************************firebase sdks ****************************************
+  // Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  updateDoc,
+  arrayUnion
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+  
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyC5WPwC7kSpMvVzP8uSwOOOhAx6p52B3z8",
+    authDomain: "singlemind-97876.firebaseapp.com",
+    projectId: "singlemind-97876",
+    storageBucket: "singlemind-97876.firebasestorage.app",
+    messagingSenderId: "445373825721",
+    appId: "1:445373825721:web:b5ab921e6a7ad577101168"
+  };
+//***********************************firebase sdk end***********************************
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+   
+
+
+
+//**************fetching data rss**************
+async function myfunction() {
+const docRef = doc(db, "users", loggedInUser);
+try {
+  const docSnap = await getDoc(docRef);
+
+if (docSnap.exists()) {
+  console.log("Document data:", docSnap.data());
+  return docSnap.data().urls
+} else {
+  // docSnap.data() will be undefined in this case
+  console.log("No such document!");
+}
+  
+} catch (error) {
+ console.log("some error")
+  
+}
+  
+}
+async function caller(params) {
+  const k= await myfunction();
+console.log("k is ",typeof(k), k)
+
+
+  //step1 use rssUrl ********************************fetching news**************************************
+    let urlArray=k
+    let count=0;
+    let rssUrl = urlArray[count].url;
+    while(rssUrl){
+    count++
+    // console.log(" the current fetching url is ",rssUrl)
+
+                   
+  // Step 2: Use rss2json proxy to get JSON data
+  const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}&count=10`;
+  console.log(apiUrl);
+
+  // Fetch the RSS data
+  await fetch(apiUrl)
+    .then(response => response.json())//convertin to json
+    .then(data => {
+      console.log("data in json format is ",data)//printing data json and no. of items
+      console.log(`Total items: ${data.items.length}`);
+      const tableBody = document.querySelector('#newsTable tbody');
+      //****************************************work to have catagory starts********************
+      const link=data.feed.link
+      console.log(link,"linkArray is ",link.split('/'))
+      const linkArray=link.split('/')
+      
+      
+      let catagoryNews=linkArray[linkArray.length-1]
+      let catagoryLink=linkArray[linkArray.length-2]
+      if(!linkArray[linkArray.length-1]){
+        catagoryNews=linkArray[linkArray.length-2]
+        catagoryLink=linkArray[linkArray.length-3]
+      }
+    //not using linkArray
+      
+
+      //****************************************work to have catagory ends********************
+      if(catagoryNews.toLowerCase()=="sports"){
+        data.items.forEach(news => {
+        const row = document.createElement('tr');
+
+        // Image cell
+        const imageCell = document.createElement('td');
+        const img = document.createElement('img');
+        img.src = news.enclosure?.link || "./images/default_img.png" ;
+        img.alt = "Image not loaded";
+        img.style.width = "200px";
+        imageCell.appendChild(img);
+        row.appendChild(imageCell);//appeding img
+
+        // Other columns// appending rest of data
+        //removing img form discription if exist
+        const temp=document.createElement("div")
+        temp.innerHTML=news.description
+        temp.querySelectorAll("img").forEach(img=> img.remove())
+        const discriptionNews=temp.textContent;
+        // console.log("text content of descriptino is :",temp.innerText)
+        row.innerHTML += `
+          <td>${news.title}</td>
+          <td>${discriptionNews}</td>
+          <td>${catagoryNews}</td>
+          <td>${news.pubDate}</td>
+        `;
+
+        tableBody.appendChild(row);//row append
+        
+//adding news link info starts*******************
+row.addEventListener("mouseover", (event) => {
+  const tooltip = document.createElement("div");
+  tooltip.innerHTML = `<a href='${link}' style='text-decoration: none;color:white;'>${link}</a>`;
+  tooltip.style.position = "absolute";
+  tooltip.style.background = "#333";
+  tooltip.style.color = "#fff";
+  tooltip.style.padding = "5px";
+  tooltip.style.borderRadius = "4px";
+  tooltip.style.fontSize = "12px";
+  tooltip.style.pointerEvents = "none"; // so it doesn't block mouse
+  tooltip.id = "customTooltip";
+
+  // Position tooltip 10px away from cursor
+  tooltip.style.top = (event.pageY + 10) + "px";
+  tooltip.style.left = (event.pageX + 10) + "px";
+
+  document.body.appendChild(tooltip);
+});
+
+row.addEventListener("mouseout", () => {
+  const tooltip = document.getElementById("customTooltip");
+  if (tooltip) tooltip.remove();
+});
+
+//adding news link info ends*******************
+
+        
+      });
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching news:', error);
+    });
+rssUrl = urlArray[count].url;  
+}
+}
+
+caller()
+
+
+
+
+</script>
+
+
+
+
+              
+</body>
+</html>

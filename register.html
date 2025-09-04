@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register | SingleMind News</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+    }
+
+    .register-container {
+      background: #2d3e50;
+      padding: 40px 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+      width: 100%;
+      max-width: 450px;
+    }
+
+    .register-container h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #66d9ef;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #444;
+      color: white;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+      outline: none;
+      background: #555;
+    }
+
+    .btn-register {
+      width: 100%;
+      padding: 12px;
+      background: #66d9ef;
+      border: none;
+      border-radius: 8px;
+      color: #111;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .btn-register:hover {
+      background: #57c6dd;
+    }
+
+    .login-link {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .login-link a {
+      color: #f0c14b;
+      text-decoration: none;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="register-container">
+    <h2>Create Account - SingleMind News</h2>
+    <form action="#" method="post" id="registerForm">
+      <div class="form-group">
+        <label for="fullname">Full Name</label>
+        <input type="text" id="fullname" name="fullname" placeholder="Enter your full name" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+      </div>
+      <div class="form-group">
+        <label for="new-password">Password</label>
+        <input type="password" id="new-password" name="new-password" placeholder="Create a password" required>
+      </div>
+      <button type="submit" class="btn-register">Register</button>
+    </form>
+
+    <div class="login-link">
+      Already have an account? <a href="login2.html">Login here</a>
+    </div>
+  </div>
+
+  <script type="module">
+      //**********************************firebase sdks ****************************************
+  // Import the functions you need from the SDKs you need
+  console.log("started")
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  updateDoc,
+  arrayUnion,
+   collection, addDoc,setDoc
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+  
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyC5WPwC7kSpMvVzP8uSwOOOhAx6p52B3z8",
+    authDomain: "singlemind-97876.firebaseapp.com",
+    projectId: "singlemind-97876",
+    storageBucket: "singlemind-97876.firebasestorage.app",
+    messagingSenderId: "445373825721",
+    appId: "1:445373825721:web:b5ab921e6a7ad577101168"
+  };
+//***********************************firebase sdk end***********************************
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  if(db)
+  console.log("summit the form!")   
+
+   
+
+  const form1=document.querySelector("#registerForm")
+form1.addEventListener("submit",async (e)=>{
+  console.log("you have submmited")
+  e.preventDefault()
+  let username=document.querySelector("form input[type=text]")
+  let email=document.querySelector("form input[type=email]")
+  let password=document.querySelector("form input[type=password]")
+
+  //checking already existed?
+  const docRef = doc(db, "users", username.value);
+try {
+  const docSnap = await getDoc(docRef);
+  if(!docSnap.exists()){
+    await setDoc(docRef, {
+    username:username.value,
+    email:email.value,
+    password:password.value 
+  });
+window.location.href="./login2.html"
+  }
+  else{
+    alert("User already existed!")
+  }
+
+
+} catch (error) {
+ console.log("some error")
+  
+}
+ 
+
+})
+  </script>
+
+</body>
+</html>
