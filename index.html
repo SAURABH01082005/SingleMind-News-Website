@@ -17,7 +17,7 @@
 
           <nav class="navbar">
           <ul>
-            <li><a href="#" class="active">Home</a></li>
+            <li><a href="index.html" class="active">Home</a></li>
 
             <li><a href="World.html">World</a></li>
             <li><a href="Technology.html">Technology</a></li>
@@ -26,10 +26,12 @@
             <li><a href="Health.html">Health</a></li>
             <li><a href="Sports.html">Sports</a></li>
             
+            
 
           </ul>
         </nav>
         
+
 
         <div class="brain"><img src="./images/brain.png" alt="brainimg" class="brainimg"><p>More</p></div>
              <div class="menu">
@@ -37,6 +39,7 @@
           <a href="#">About</a>
           <a href="#">Account</a>
           <a href="#">Contact</a>
+          <a href="#" onclick="event.preventDefault(); location.replace('login2.html')">Logout</a>
           </div>   
         </header>
 
@@ -91,6 +94,8 @@
                     ctx.fillStyle = "red";
                     ctx.fillText("No Ads. No Distractions. Just News.", 20, 100);
 </script>
+
+
 
 <script type="module">
 const  loggedInUser = localStorage.getItem("loggedInUser");
@@ -260,7 +265,6 @@ caller()
 
 
 </script>
-
 
 
 
