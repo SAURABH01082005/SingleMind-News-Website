@@ -266,3 +266,60 @@ html, body {
    
    padding: 2px 5px 2px 5px;
 }
+
+#hamburgur{
+  position:absolute;
+  margin:20px 0px 0px 20px;
+  cursor: pointer;
+  
+  height: 30px;
+}
+   .sidebar {
+      position: fixed;
+      top: 0;
+      left: -250px; 
+      width: 220px;
+      height: 100%;
+      background: #111;
+      color: white;
+      padding-top: 60px;
+      transition: 0.3s;
+    }
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+    }
+
+    .dragStoreBox{
+      position: fixed;
+      display: flex;
+      height: 200px;
+      opacity: 0;              /* fully transparent */
+      transform: scale(0);     /* start small*/
+     transition: transform 0.5s ease, opacity 0.5s ease;
+      background: radial-gradient(
+      circle,
+      #225192 0%,                /* darkest at the very center */
+      #225192cc 50%,             /* semi-transparent middle */
+      #22519233 100%             /* much lighter edges */
+      );
+      }
+    .dragStoreBox p{
+      position: absolute;
+      top: 45%;
+      left: 30%;
+    }
+    .dragStoreBox img{
+      height: 100%;
+    }
+    .dragStoreBox.showDragStore{
+                 /* make visible */
+      opacity: 1;              /* fade in */
+      transform: scale(1);
+
+    }

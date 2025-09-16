@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Account - SingleMind News</title>
+  <link rel="stylesheet" href="style.css"> <!-- reuse your existing CSS -->
+  <style>
+    body {
+      background: linear-gradient(to right, #18365b, #225192);
+      font-family: Arial, sans-serif;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    .account-container {
+      max-width: 1000px;
+      margin: 80px auto;
+      background: #fff;
+      color: #222;
+      border-radius: 12px;
+      box-shadow: 0px 4px 15px rgba(0,0,0,0.3);
+      padding: 30px;
+    }
+
+    .account-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .account-header h2 {
+      margin: 0;
+      font-size: 2rem;
+      color: #225192;
+    }
+
+    .account-header p {
+      color: #555;
+      margin-top: 8px;
+    }
+
+    .bookmark-list {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .bookmark-list th, .bookmark-list td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+
+    .bookmark-list th {
+      background: #225192;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .bookmark-list tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+
+    .bookmark-list img {
+      width: 120px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="account-container">
+    <div class="account-header">
+      <h2>👤 My Account</h2>
+      <p>Welcome back, <span id="username">John Doe</span></p>
+    </div>
+
+    <h3>🔖 My Bookmarked News</h3>
+    <table class="bookmark-list">
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Title</th>
+          <th>Summary</th>
+          <th>Category</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody id="bookmarkTableBody">
+        <!-- Example row -->
+        <tr>
+          <td><img src="https://via.placeholder.com/120" alt="news"></td>
+          <td>Sample Bookmarked News</td>
+          <td>This is a short summary of the saved news article.</td>
+          <td>World</td>
+          <td>2025-09-16</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <iframe src="https://timesofindia.indiatimes.com/world/us/washington-post-fires-karen-attiah-columnist-links-dismissal-to-posts-on-charlie-kirk-guild-accuses-paper-of-free-speech-violation/articleshow/123915243.cms" frameborder="0"></iframe>
+
+</body>
+</html>

@@ -11,7 +11,22 @@
   <div class="content-wrapper">
         <header>
           <!-- <h1>📰 SingleMind News</h1> -->
+           <img src="./images/hamburgur.png" id="hamburgur" alt="hamburgur" onclick="openSidebar()">
           <img src="./images/singlemind.png" alt="singlemindimg">
+
+            <div id="sidebar" class="sidebar">
+              <a href="#">🏠 Home</a>
+              <a href="#">🔥 Trending</a>
+              <a href="#">📺 Subscriptions</a>
+              <a href="#">⭐ Library</a>
+            </div>
+            <!-- Overlay -->
+            <div id="overlay" class="overlay" onclick="closeSidebar()"></div>
+
+            <div class="dragStoreBox"><p>Drop Here to Save!</p>
+              <img src="./images/royalborder.png" alt="image">
+            </div>
+
        
 
 
@@ -65,12 +80,6 @@
                 <tbody>
                   <!-- JS will insert rows -->
 
-                  <script>
-   
-
-        
-                  </script>
-
                 </tbody>
               </table>
             </div>
@@ -95,7 +104,16 @@
                     ctx.fillStyle = "red";
                     ctx.fillText("No Ads. No Distractions. Just News.", 20, 100);
 </script>
-
+<script>
+  function openSidebar(){
+    document.querySelector("#sidebar").style.left="0px"
+    document.querySelector("#overlay").style.display="block"
+  }
+  function closeSidebar(){
+    document.querySelector("#overlay").style.display="none"
+    document.querySelector("#sidebar").style.left="-250px"
+  }
+</script>
   <script>
     let logoutpage=document.getElementById("logoutpage")
     logoutpage.addEventListener("click",(event)=>{
@@ -145,14 +163,16 @@ import {
 
 
 //**************fetching data rss**************
-async function myfunction() {
+async function myfunction(k) {
 const docRef = doc(db, "users", loggedInUser);
 try {
   const docSnap = await getDoc(docRef);
 
 if (docSnap.exists()) {
   console.log("Document data:", docSnap.data());
-  return docSnap.data().urls
+  if(k=='urls') return docSnap.data().urls
+  
+   
 } else {
 
   console.log("No such document!");
@@ -165,7 +185,7 @@ if (docSnap.exists()) {
   
 }
 async function caller(params) {
-  const k= await myfunction();
+  const k= await myfunction("urls");
 console.log("k is ",typeof(k), k)
 
 
@@ -210,7 +230,7 @@ console.log("k is ",typeof(k), k)
        
         //showlinkUrl
         let showlinkUrl=news.link;
-        // console.log("showlinkurl is ",showlinkUrl)
+        // console.log("showlinkUrl is ",showlinkUrl)
         const row = document.createElement('tr');
 
         // Image cell
@@ -220,6 +240,7 @@ console.log("k is ",typeof(k), k)
         img.src = news.enclosure?.link || "./images/default_img.png" ;
         img.alt = "Image not loaded";
         img.style.width = "200px";
+        img.className="rowimg"
         imageCell.appendChild(img);
         row.appendChild(imageCell);//appeding img
 
@@ -238,6 +259,9 @@ console.log("k is ",typeof(k), k)
         `;
 
         tableBody.appendChild(row);//row append
+        let newObject={
+          
+        }
         
 //adding news link info starts*******************
 
@@ -260,6 +284,7 @@ row.addEventListener("mouseout", () => {
 });
 showlink.addEventListener("mouseover",(event)=>{
    showlink.style.display='block';
+  //  console.log("hovering in showlingk box")
 
 })
 
@@ -269,8 +294,19 @@ function moveTooltip(event){
 }
 
 //dragging the img---------------------------------starts
-img.addEventListener("dragstart",(event)=>{})
+let dragStoreBox=document.querySelector(".dragStoreBox")
+row.addEventListener("dragstart",(event)=>{
+  console.log("image is dragging-----------")
+  dragStoreBox.classList.add("showDragStore")
+  var showlinkUrlGobal =showlinkUrl;
+  console.log("after image is dragging")
+  event.dataTransfer.setData("text/plain", showlinkUrl)
+})
+
+
 //dragging the img---------------------------------ends
+
+
 
 
 
@@ -286,7 +322,37 @@ rssUrl = urlArray[count].url;
 }
 }
 
+
 caller()
+
+let dragStoreBox=document.querySelector(".dragStoreBox")
+dragStoreBox.addEventListener("dragover",(event)=>{
+  event.preventDefault()
+
+})
+dragStoreBox.addEventListener("drop",(event)=>{
+  dragStoreBox.classList.remove("showDragStore")
+  const droppedUrl = event.dataTransfer.getData("text/plain")
+  updateDrag(droppedUrl)
+  
+})
+
+async function updateDrag(k){
+  const docRef = await doc(db, "users", loggedInUser);
+  try {
+        await updateDoc(docRef, {
+        bookmarks: arrayUnion(k)
+        
+        });
+        alert("successfully added")
+
+        } catch (error) {
+        console.log("Updation failed!!!",error)
+        alert("unsuccesfull")
+
+        }
+
+}
 
 
 
