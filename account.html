@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Account - SingleMind News</title>
-  <link rel="stylesheet" href="style.css"> <!-- reuse your existing CSS -->
+  <link rel="stylesheet" href="style.css">
   <style>
     body {
       background: linear-gradient(to right, #18365b, #225192);
@@ -29,7 +29,7 @@
       margin-bottom: 30px;
     }
 
-    .account-header h2 {
+    .account-header h2{
       margin: 0;
       font-size: 2rem;
       color: #225192;
@@ -65,14 +65,27 @@
       width: 120px;
       border-radius: 6px;
     }
+
+    .delete-btn {
+      background-color: #ff4d4d;
+      border: none;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      background-color: #e60000;
+    }
   </style>
 </head>
 <body>
 
   <div class="account-container">
     <div class="account-header">
-      <h2>👤 My Account</h2>
-      <p>Welcome back, <span id="username">John Doe</span></p>
+      <h2 >👤<span class="username">My Account</span></h2>
+      <p>Welcome back, <span class="username">John Doe</span></p>
     </div>
 
     <h3>🔖 My Bookmarked News</h3>
@@ -84,21 +97,207 @@
           <th>Summary</th>
           <th>Category</th>
           <th>Date</th>
+          <th>Actions</th> <!-- Added Actions column -->
         </tr>
       </thead>
       <tbody id="bookmarkTableBody">
-        <!-- Example row -->
-        <tr>
-          <td><img src="https://via.placeholder.com/120" alt="news"></td>
-          <td>Sample Bookmarked News</td>
-          <td>This is a short summary of the saved news article.</td>
-          <td>World</td>
-          <td>2025-09-16</td>
-        </tr>
+       
       </tbody>
     </table>
   </div>
-  <iframe src="https://timesofindia.indiatimes.com/world/us/washington-post-fires-karen-attiah-columnist-links-dismissal-to-posts-on-charlie-kirk-guild-accuses-paper-of-free-speech-violation/articleshow/123915243.cms" frameborder="0"></iframe>
+
+  <script>
+   
+
+  </script>
+
+<script type="module">  
+const  loggedInUser = localStorage.getItem("loggedInUser");
+// const loggedInUser="manoj kurmar yadav"
+console.log("checking session ",loggedInUser)
+let name=document.querySelectorAll(".username")
+
+name[0].innerText=capitalize(loggedInUser)
+name[1].innerText=capitalize(loggedInUser)
+
+function capitalize(l){
+ let k= l.split(" ").map(element =>{
+  let a=element.split("")
+  a[0]=a[0].toUpperCase()
+
+      return a.join("")
+
+  })
+  return k.join(" ")
+  
+}
+
+  //**********************************firebase sdks ****************************************
+  // Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+  
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyC5WPwC7kSpMvVzP8uSwOOOhAx6p52B3z8",
+    authDomain: "singlemind-97876.firebaseapp.com",
+    projectId: "singlemind-97876",
+    storageBucket: "singlemind-97876.firebasestorage.app",
+    messagingSenderId: "445373825721",
+    appId: "1:445373825721:web:b5ab921e6a7ad577101168"
+  };
+//***********************************firebase sdk end***********************************
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+   
+
+
+
+//**************fetching data rss**************
+async function myfunction(k) {
+    const docRef = doc(db, "users", loggedInUser);
+    try {
+      const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      // console.log("Document data:", docSnap.data());
+      if(k=='urls') return docSnap.data().urls
+      if(k=='bookmarks') return docSnap.data().bookmarks
+      // console.log("function completed")
+      
+      
+    } else {
+
+      console.log("No such document!");
+    }
+      
+    } catch (error) {
+    console.log("some error")
+      
+    }
+  
+}
+async function caller(params) {
+ const bookmarks= await myfunction("bookmarks");
+ tableBody.innerHTML = "";
+// console.log("bookmarks is ",typeof(bookmarks), bookmarks)
+bookmarks.forEach(async k => {
+  
+  let news= JSON.parse(k)
+  // console.log("news is ",news)
+  const row = document.createElement('tr');
+
+        // Image cell
+        const imageCell = document.createElement('td');
+        const img = document.createElement('img');
+        img.src = news.enclosure?.link || "./images/default_img.png" ;
+        img.alt = "Image not loaded";
+        img.style.width = "200px";
+        img.className="rowimg"
+        imageCell.appendChild(img);
+        row.appendChild(imageCell);//appeding img
+
+
+        
+        const catagoryNews=news.catagoryNews
+        console.log(catagoryNews)
+
+        // Other columns// appending rest of data
+        //removing img form discription if exist
+        const temp=document.createElement("div")
+        temp.innerHTML=news.description
+        temp.querySelectorAll("img").forEach(img=> img.remove())
+        const discriptionNews=temp.textContent;
+        // console.log("text content of descriptino is :",temp.innerText)
+        row.innerHTML += `
+          <td>${news.title}</td>
+          <td>${discriptionNews}</td>
+          <td>${catagoryNews}</td>
+          <td>${news.pubDate}</td>
+          <td><button class="delete-btn">Delete</button></td>
+        `;
+
+        tableBody.appendChild(row);//row append
+
+});
+
+
+}
+
+caller()
+
+
+
+ const tableBody = document.getElementById('bookmarkTableBody');
+
+    // Event delegation to handle delete buttons
+    tableBody.addEventListener('click', function(event) {
+      if(event.target.classList.contains('delete-btn')) {
+        const row = event.target.closest('tr');
+        // console.log("the row is ",row)
+
+        // console.log("this.row is ",row.cells[2].innerText)
+        let discription=row.cells[2].innerText
+        removeData(discription)
+      
+
+        // row.remove()
+        tableBody.innerHTML = "";
+        caller()
+        
+      }
+    });
+
+
+      async function removeData(params) {
+          const bookmarks= await myfunction("bookmarks")
+         
+          for (let element of bookmarks)  {
+           
+            let news=JSON.parse(element)
+            let temp=document.createElement("div")
+            temp.innerHTML=news.description
+            temp.querySelectorAll("img").forEach(img=> img.remove())
+            const discriptionNews=temp.textContent;
+            console.log("discriptionNews : ",discriptionNews,discriptionNews.length)
+            console.log("params : ",params,params.length)
+            params='\n'+params
+            
+            if(discriptionNews==params)
+          {
+             const docRef = doc(db, "users", loggedInUser);
+              try{
+                 await updateDoc(docRef, {
+                bookmarks: arrayRemove(element) 
+               });
+               console.log("removed successfully")
+
+              }catch(error){
+                console.log("removal unsccessfull",error)
+
+              }
+          }
+          else console.log("not equal")
+            
+          };
+        
+
+
+          
+        }
+    
+</script>
+  
 
 </body>
 </html>

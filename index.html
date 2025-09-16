@@ -52,7 +52,7 @@
              <div class="menu">
           <a href="./feeder.html">Feeder</a>
           <a href="#">About</a>
-          <a href="#">Account</a>
+          <a href="./account.html">Account</a>
           <a href="#">Contact</a>
           <a href="#" id="logoutpage">Logout</a>
           </div>   
@@ -259,9 +259,7 @@ console.log("k is ",typeof(k), k)
         `;
 
         tableBody.appendChild(row);//row append
-        let newObject={
-          
-        }
+       
         
 //adding news link info starts*******************
 
@@ -300,7 +298,11 @@ row.addEventListener("dragstart",(event)=>{
   dragStoreBox.classList.add("showDragStore")
   var showlinkUrlGobal =showlinkUrl;
   console.log("after image is dragging")
-  event.dataTransfer.setData("text/plain", showlinkUrl)
+
+  event.dataTransfer.setData("text/plain", JSON.stringify(news))//dataTransfer only take string//convert obj into json format and then string
+ 
+  event.dataTransfer.setData("text/catagoryNews",catagoryNews)
+  
 })
 
 
@@ -333,15 +335,24 @@ dragStoreBox.addEventListener("dragover",(event)=>{
 dragStoreBox.addEventListener("drop",(event)=>{
   dragStoreBox.classList.remove("showDragStore")
   const droppedUrl = event.dataTransfer.getData("text/plain")
-  updateDrag(droppedUrl)
+  
+  const catagoryNews = event.dataTransfer.getData("text/catagoryNews")
+  let temp=JSON.parse(droppedUrl)
+  
+  temp.catagoryNews=catagoryNews
+  console.log("this is before stringify ..............",temp)
+  updateDrag(JSON.stringify(temp))//parsing required on other end
+ 
   
 })
 
 async function updateDrag(k){
   const docRef = await doc(db, "users", loggedInUser);
+  console.log("saved element is ",JSON.parse(k))
   try {
         await updateDoc(docRef, {
         bookmarks: arrayUnion(k)
+        
         
         });
         alert("successfully added")
