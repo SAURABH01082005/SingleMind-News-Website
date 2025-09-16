@@ -345,6 +345,16 @@ dragStoreBox.addEventListener("drop",(event)=>{
  
   
 })
+let body=document.querySelector("body")
+body.addEventListener("dragover", (event) => {
+  event.preventDefault(); // <-- required to allow dropping
+});
+body.addEventListener("drop",(event)=>{
+  console.log("dropping in body -----------")
+  event.preventDefault()
+  dragStoreBox.classList.remove("showDragStore")
+
+})
 
 async function updateDrag(k){
   const docRef = await doc(db, "users", loggedInUser);
