@@ -39,7 +39,7 @@
           <a href="#">About</a>
           <a href="#">Account</a>
           <a href="#">Contact</a>
-          <a href="#" onclick="event.preventDefault(); location.replace('login2.html')">Logout</a>
+          <a href="#" id="logoutpage">Logout</a>
           </div>   
         </header>
 
@@ -77,13 +77,14 @@
 
         </main>
 
+        <div class="showlink" >this is your link.........</div>
+
         <footer>
           <p>&copy; 2025 SingleMind News. All rights reserved.</p>
         </footer> 
       
 
   </div>
-
 <script>
    // Canvas Output
                     const canvas = document.getElementById("newsCanvas");
@@ -95,6 +96,16 @@
                     ctx.fillText("No Ads. No Distractions. Just News.", 20, 100);
 </script>
 
+  <script>
+    let logoutpage=document.getElementById("logoutpage")
+    logoutpage.addEventListener("click",(event)=>{
+      localStorage.removeItem("loggedInUser")
+      console.log("user session remove and logout..........")
+      event.preventDefault(); 
+      location.replace('login2.html')
+      // window.location.href="./login2.html"//not working ...
+    })
+  </script>
 
 
 <script type="module">
@@ -143,7 +154,7 @@ if (docSnap.exists()) {
   console.log("Document data:", docSnap.data());
   return docSnap.data().urls
 } else {
-  // docSnap.data() will be undefined in this case
+
   console.log("No such document!");
 }
   
@@ -194,12 +205,18 @@ console.log("k is ",typeof(k), k)
       
 
       //****************************************work to have catagory ends********************
+    
       data.items.forEach(news => {
+       
+        //showlinkUrl
+        let showlinkUrl=news.link;
+        // console.log("showlinkurl is ",showlinkUrl)
         const row = document.createElement('tr');
 
         // Image cell
         const imageCell = document.createElement('td');
         const img = document.createElement('img');
+        img.draggable='true'
         img.src = news.enclosure?.link || "./images/default_img.png" ;
         img.alt = "Image not loaded";
         img.style.width = "200px";
@@ -223,29 +240,39 @@ console.log("k is ",typeof(k), k)
         tableBody.appendChild(row);//row append
         
 //adding news link info starts*******************
-row.addEventListener("mouseover", (event) => {
-  const tooltip = document.createElement("div");
-  tooltip.innerHTML = `<a href='${link}' style='text-decoration: none;color:white;'>${link}</a>`;
-  tooltip.style.position = "absolute";
-  tooltip.style.background = "#333";
-  tooltip.style.color = "#fff";
-  tooltip.style.padding = "5px";
-  tooltip.style.borderRadius = "4px";
-  tooltip.style.fontSize = "12px";
-  tooltip.style.pointerEvents = "none"; // so it doesn't block mouse
-  tooltip.id = "customTooltip";
 
-  // Position tooltip 10px away from cursor
-  tooltip.style.top = (event.pageY + 10) + "px";
-  tooltip.style.left = (event.pageX + 10) + "px";
 
-  document.body.appendChild(tooltip);
-});
+let showlink=document.querySelector('.showlink'); 
+row.addEventListener("mouseover",(event)=>{
+  showlink.innerHTML = `<a href='${showlinkUrl}' style='text-decoration: none;color:black;'>${link}</a>`;
+  showlink.style.display='block'
+  // showlink.style.pointerEvents = "none"; 
+  document.body.appendChild(showlink)
+  moveTooltip(event);
+
+
+})
+
 
 row.addEventListener("mouseout", () => {
-  const tooltip = document.getElementById("customTooltip");
-  if (tooltip) tooltip.remove();
+  showlink.style.display='none';
+
 });
+showlink.addEventListener("mouseover",(event)=>{
+   showlink.style.display='block';
+
+})
+
+function moveTooltip(event){
+   showlink.style.top=(event.pageY+10) +"px"
+  showlink.style.left=(event.pageX+10)+"px"
+}
+
+//dragging the img---------------------------------starts
+img.addEventListener("dragstart",(event)=>{})
+//dragging the img---------------------------------ends
+
+
 
 //adding news link info ends*******************
 

@@ -164,9 +164,10 @@ if(docSnap.data()){
   let temp=docSnap.data()
   if(temp.password==password){
     console.log("second success")
-    window.location.href="./index.html"
-     localStorage.setItem("loggedInUser", username);//creatingsession
-     console.log("session is activated")
+    localStorage.setItem("loggedInUser", username);//creatingsession
+    console.log("session is activated")
+    // window.location.href="./index.html"//not working ...
+    location.replace('index.html')
 
   }
 else{
