@@ -15,7 +15,7 @@
     }
 
     .account-container {
-      max-width: 1000px;
+      max-width: 1200px;
       margin: 80px auto;
       background: #fff;
       color: #222;
@@ -105,6 +105,9 @@
       </tbody>
     </table>
   </div>
+  <div class="showlink" >this is your link.........</div>
+  <footer> <p>&copy; 2025 SingleMind News. All rights reserved.</p>
+        </footer> 
 
   <script>
    
@@ -194,7 +197,7 @@ async function caller(params) {
 bookmarks.forEach(async k => {
   
   let news= JSON.parse(k)
-  // console.log("news is ",news)
+  console.log("news is ",news)
   const row = document.createElement('tr');
 
         // Image cell
@@ -210,6 +213,8 @@ bookmarks.forEach(async k => {
 
         
         const catagoryNews=news.catagoryNews
+        const showmylink=news.showmylink
+        const link=news.link
         console.log(catagoryNews)
 
         // Other columns// appending rest of data
@@ -217,6 +222,7 @@ bookmarks.forEach(async k => {
         const temp=document.createElement("div")
         temp.innerHTML=news.description
         temp.querySelectorAll("img").forEach(img=> img.remove())
+        // console.log("after removing img from description: ",temp.innerHTML)
         const discriptionNews=temp.textContent;
         // console.log("text content of descriptino is :",temp.innerText)
         row.innerHTML += `
@@ -228,6 +234,38 @@ bookmarks.forEach(async k => {
         `;
 
         tableBody.appendChild(row);//row append
+
+        //adding news link info starts*******************
+
+
+        let showlink=document.querySelector('.showlink'); 
+        row.addEventListener("mouseover",(event)=>{
+          showlink.innerHTML = `<a href='${link}' style='text-decoration: none;color:black;'>${showmylink}</a>`;
+          showlink.style.display='block'
+          // showlink.style.pointerEvents = "none"; 
+          document.body.appendChild(showlink)
+          moveTooltip(event);
+
+
+        })
+
+
+        row.addEventListener("mouseout", () => {
+          showlink.style.display='none';
+
+        });
+        showlink.addEventListener("mouseover",(event)=>{
+          showlink.style.display='block';
+          //  console.log("hovering in showlingk box")
+
+        })
+
+        function moveTooltip(event){
+          showlink.style.top=(event.pageY+10) +"px"
+          showlink.style.left=(event.pageX+10)+"px"
+        }
+        //adding news link info ends*******************
+
 
 });
 
@@ -241,19 +279,19 @@ caller()
  const tableBody = document.getElementById('bookmarkTableBody');
 
     // Event delegation to handle delete buttons
-    tableBody.addEventListener('click', function(event) {
+    tableBody.addEventListener('click', async function(event) {
       if(event.target.classList.contains('delete-btn')) {
         const row = event.target.closest('tr');
         // console.log("the row is ",row)
 
         // console.log("this.row is ",row.cells[2].innerText)
         let discription=row.cells[2].innerText
-        removeData(discription)
+        await removeData(discription)
       
 
-        // row.remove()
+        row.remove()
         tableBody.innerHTML = "";
-        caller()
+        await caller()
         
       }
     });
@@ -267,13 +305,17 @@ caller()
             let news=JSON.parse(element)
             let temp=document.createElement("div")
             temp.innerHTML=news.description
+            // console.log("news.link is : ",news.link)
             temp.querySelectorAll("img").forEach(img=> img.remove())
             const discriptionNews=temp.textContent;
-            console.log("discriptionNews : ",discriptionNews,discriptionNews.length)
-            console.log("params : ",params,params.length)
-            params='\n'+params
+          
+            // console.log("discriptionNews : ",discriptionNews,discriptionNews.length)
+            // showStarting(discriptionNews)
+            // console.log("params : ",params,params.length)
             
-            if(discriptionNews==params)
+            
+            
+            if(discriptionNews==params||discriptionNews=='\n'+params)
           {
              const docRef = doc(db, "users", loggedInUser);
               try{
@@ -295,6 +337,10 @@ caller()
 
           
         }
+        // function showStarting(c){
+        // const first=c[0].charCodeAt(0)
+        // console.log("hidden element is : for ",c," is ",JSON.stringify(c[0]),first)
+        // }
     
 </script>
   

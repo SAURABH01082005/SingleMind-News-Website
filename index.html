@@ -290,16 +290,18 @@ function moveTooltip(event){
    showlink.style.top=(event.pageY+10) +"px"
   showlink.style.left=(event.pageX+10)+"px"
 }
+//adding news link info ends*******************
 
 //dragging the img---------------------------------starts
 let dragStoreBox=document.querySelector(".dragStoreBox")
 row.addEventListener("dragstart",(event)=>{
   console.log("image is dragging-----------")
   dragStoreBox.classList.add("showDragStore")
-  var showlinkUrlGobal =showlinkUrl;
+  
   console.log("after image is dragging")
 
   event.dataTransfer.setData("text/plain", JSON.stringify(news))//dataTransfer only take string//convert obj into json format and then string
+  event.dataTransfer.setData("text/link", link)//dataTransfer only take string//convert obj into json format and then string
  
   event.dataTransfer.setData("text/catagoryNews",catagoryNews)
   
@@ -310,9 +312,6 @@ row.addEventListener("dragstart",(event)=>{
 
 
 
-
-
-//adding news link info ends*******************
 
         
       });
@@ -335,16 +334,21 @@ dragStoreBox.addEventListener("dragover",(event)=>{
 dragStoreBox.addEventListener("drop",(event)=>{
   dragStoreBox.classList.remove("showDragStore")
   const droppedUrl = event.dataTransfer.getData("text/plain")
-  
+  const link = event.dataTransfer.getData("text/link")
+  console.log("link is ",link)
   const catagoryNews = event.dataTransfer.getData("text/catagoryNews")
   let temp=JSON.parse(droppedUrl)
   
   temp.catagoryNews=catagoryNews
-  console.log("this is before stringify ..............",temp)
+  temp.showmylink=link
+  
+  console.log("this is before stringify showmylink ..............",temp.showmylink)
+
   updateDrag(JSON.stringify(temp))//parsing required on other end
  
+ 
   
-})
+})  
 let body=document.querySelector("body")
 body.addEventListener("dragover", (event) => {
   event.preventDefault(); // <-- required to allow dropping
