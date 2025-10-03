@@ -153,3 +153,11 @@ export async function logoutButtonPressed() {
 
 
 
+export function catagoryNewsFunc(link){
+  const linkArray=link.split('/')
+  let catagoryNews=linkArray[linkArray.length-1]
+      if(!linkArray[linkArray.length-1]){
+        catagoryNews=linkArray[linkArray.length-2]
+      }
+      return catagoryNews
+}

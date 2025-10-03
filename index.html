@@ -121,6 +121,7 @@
         imgDraggingStartsRemaining,
         tooltipShow,
         readData,
+        catagoryNewsFunc,
         } from './commonscript.js'
 
 
@@ -187,16 +188,8 @@ console.log("k is ",typeof(k), k)
       const tableBody = document.querySelector('#newsTable tbody');
       //****************************************work to have catagory starts********************
       const link=data.feed.link
-      console.log(link,"linkArray is ",link.split('/'))
-      const linkArray=link.split('/')
-      
-      
-      let catagoryNews=linkArray[linkArray.length-1]
-      let catagoryLink=linkArray[linkArray.length-2]
-      if(!linkArray[linkArray.length-1]){
-        catagoryNews=linkArray[linkArray.length-2]
-        catagoryLink=linkArray[linkArray.length-3]
-      }
+      let catagoryNews=catagoryNewsFunc(link)
+      console.log("catagory news is : ",catagoryNews)
     //not using linkArray
       
 
