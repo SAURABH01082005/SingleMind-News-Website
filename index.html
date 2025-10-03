@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SingleMind News</title>
   <link rel="stylesheet" href="style.css" />
-
+  
 </head>
 <body>
   <div class="content-wrapper">
@@ -33,17 +33,17 @@
           <nav class="navbar">
           <ul>
             <li><a href="index.html" class="active">Home</a></li>
-
-            <li><a href="#" onclick="moduleNews('world')">World</a></li>
-            <li><a href="#" onclick="moduleNews('technology')" >Technology</a></li>
-            <li><a href="#" onclick="moduleNews('business')">Business</a></li>
-            <li><a href="#" onclick="moduleNews('science')">Science</a></li>
-            <li><a href="#" onclick="moduleNews('health')">Health</a></li>
-            <li><a href="#" onclick="moduleNews('sports')">Sports</a></li>
-            
+            <li><a href="#" onclick="moduleNews('broad','world')">World</a></li>
+            <li><a href="#" onclick="moduleNews('broad','national')">National</a></li>
+            <li><a href="#" onclick="moduleNews('broad','politics')">Politics</a></li>
+            <li><a href="#" onclick="moduleNews('broad','business')">Business</a></li>
+            <li><a href="#" onclick="moduleNews('broad','science_tech')" >Science_Tech</a></li>
+            <li><a href="#" onclick="moduleNews('broad','health')">Health</a></li>
+            <li><a href="#" onclick="moduleNews('broad','lifestyle')">LifeStyle</a></li>
             
 
           </ul>
+         
         </nav>
         
 
@@ -57,12 +57,18 @@
           <a href="#" id="logoutpage">Logout</a>
           </div>   
         </header>
+         <div class="detailoptions">
+          <ul>
+            <!-- inserted by js code  -->
+
+          </ul>
+          </div>
 
       
 
         <main id="news-container">
           
-          <!-- <canvas id="newsCanvas" width="700" height="150"></canvas> -->
+          <canvas id="newsCanvas" width="800px" height="200px" ></canvas>
          
 
 
@@ -94,16 +100,6 @@
       
 
   </div>
-<script>
-   // Canvas Output
-                    const canvas = document.getElementById("newsCanvas");
-                    const ctx = canvas.getContext("2d");
-                    ctx.font = "20px Segoe UI";
-                    ctx.fillStyle = "#000";
-                    ctx.fillText("Welcome to SingleMind News!", 20, 50);
-                    ctx.fillStyle = "red";
-                    ctx.fillText("No Ads. No Distractions. Just News.", 20, 100);
-</script>
 
 <script>
   function openSidebar(){
@@ -114,11 +110,20 @@
     document.querySelector("#overlay").style.display="none"
     document.querySelector("#sidebar").style.left="-250px"
   }
-  function moduleNews(catNews){
+  function moduleNews(type,catNews){
+    localStorage.setItem("catagoryType",type)
     localStorage.setItem("catagory",catNews)
     location.href="./moduleNews.html"
   }
     
+</script>
+
+<script>
+  
+
+  
+
+
 </script>
 <script type="module">
   import{logoutButtonPressed,imgDraggingStarts,
@@ -126,6 +131,8 @@
         tooltipShow,
         readData,
         catagoryNewsFunc,
+        getKeywords,
+        canvasShow,
         } from './commonscript.js'
 
 
@@ -135,6 +142,59 @@ console.log("Session is created of user ",loggedInUser)
 logoutButtonPressed()
 
 
+
+let detailcon=document.querySelector(".detailoptions")
+let ul=document.querySelector(".detailoptions ul")
+let texthover=document.querySelectorAll(".navbar ul li a")
+let timer;
+texthover.forEach(ele=>{
+  ele.addEventListener("mouseenter",async event=>{
+    
+   clearTimeout(timer)
+    detailcon.innerHTML=""
+
+    detailcon.classList.add("detailoptions2")
+   
+    // console.log("this is eleemnt ",ele.textContent.toLocaleLowerCase())
+    let l=ele.textContent.toLocaleLowerCase()
+    const matchArrayDetailList=await getKeywords(l)
+    console.log("matchArrayDetailList is ",matchArrayDetailList)
+    matchArrayDetailList.forEach(ele=>{
+    // console.log("element is inserting: ",ele)
+    let li=document.createElement("li")
+     li.classList.add("list_detail")
+     li.innerHTML=`<a href="#" onclick='moduleNews("narrow","${ele}")'>${ele}</a>`
+     detailcon.appendChild(li)
+     
+      })
+
+
+  })
+   ele.addEventListener("mouseleave",event=>{
+    
+     timer=setTimeout(() => {
+      console.log("Event is : ",event)
+     detailcon.classList.remove("detailoptions2")
+     detailcon.innerHTML=""
+      
+     }, 100);
+    
+  })
+})
+detailcon.addEventListener("mouseenter",()=>{
+  clearTimeout(timer);
+  
+})
+detailcon.addEventListener("mouseleave",()=>{
+  detailcon.classList.remove("detailoptions2")
+     detailcon.innerHTML=""
+  
+
+})
+
+
+
+  
   //**********************************firebase sdks ****************************************
   // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
@@ -166,18 +226,18 @@ import {
 
 
 //**************fetching data rss**************
-async function caller(params) {
+async function caller() {
 const k= await readData("urls",db,loggedInUser).catch(err =>{console.log("there is error",err)});
-console.log("k is ",typeof(k), k)
+// console.log("k is ",typeof(k), k)
 
   //step1 use rssUrl ********************************fetching news**************************************
     let urlArray=k
     let count=0;
-    let rssUrl = urlArray[count].url;
-    while(rssUrl){
-    count++
-    // console.log(" the current fetching url is ",rssUrl)
-
+    let rssUrl;
+    // console.log("urlArray is ; ",urlArray.length)
+    for(count=0;count<urlArray.length;count++){
+      
+    rssUrl = urlArray[count].url;
                    
   // Step 2: Use rss2json proxy to get JSON data
   const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}&count=10`;
@@ -193,7 +253,7 @@ console.log("k is ",typeof(k), k)
       //****************************************work to have catagory starts********************
       const link=data.feed.link
       let catagoryNews=catagoryNewsFunc(link)
-      console.log("catagory news is : ",catagoryNews)
+      // console.log("catagory news is : ",catagoryNews)
     //not using linkArray
       
 
@@ -234,7 +294,6 @@ console.log("k is ",typeof(k), k)
         tableBody.appendChild(row);//row append
              
 //adding news link info starts*******************
-console.log("arrived......")
  tooltipShow(row,showlinkUrl,link)
 //adding news link info ends*******************
 
@@ -248,13 +307,24 @@ imgDraggingStarts(row,news,link,catagoryNews)
     .catch(error => {
       console.error('Error fetching news:', error);
     });
-rssUrl = urlArray[count].url;  
+  
 }
 }
 
-
-caller()
 imgDraggingStartsRemaining(db,loggedInUser)
+async function a(){
+
+ await caller()
+  
+  
+  console.log("before canvasshow****************************8888")
+  let catagoryPage=""
+  canvasShow(catagoryPage)
+  console.log("after canvasshow************************")
+}
+a()
+
+
 
 </script>
             

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SingleMind News</title>
   <link rel="stylesheet" href="style.css" />
-
+ 
 </head>
 <body>
   <div class="content-wrapper">
@@ -32,13 +32,13 @@
           <nav class="navbar">
           <ul>
             <li><a href="index.html" class="active">Home</a></li>
-
-            <li><a href="#" onclick="moduleNews('world')">World</a></li>
-            <li><a href="#" onclick="moduleNews('technology')" >Technology</a></li>
-            <li><a href="#" onclick="moduleNews('business')">Business</a></li>
-            <li><a href="#" onclick="moduleNews('science')">Science</a></li>
-            <li><a href="#" onclick="moduleNews('health')">Health</a></li>
-            <li><a href="#" onclick="moduleNews('sports')">Sports</a></li>
+            <li><a href="#" onclick="moduleNews('broad','world')">World</a></li>
+            <li><a href="#" onclick="moduleNews('broad','national')">National</a></li>
+            <li><a href="#" onclick="moduleNews('broad','politics')">Politics</a></li>
+            <li><a href="#" onclick="moduleNews('broad','business')">Business</a></li>
+            <li><a href="#" onclick="moduleNews('broad','science_tech')" >Science_Tech</a></li>
+            <li><a href="#" onclick="moduleNews('broad','health')">Health</a></li>
+            <li><a href="#" onclick="moduleNews('broad','lifestyle')">LifeStyle</a></li>
             
             
 
@@ -55,12 +55,18 @@
           <a href="#" id="logoutpage">Logout</a>
           </div>     
         </header>
+        <div class="detailoptions">
+          <ul>
+            <!-- inserted by js code  -->
+
+          </ul>
+          </div>
 
       
 
         <main id="news-container">
           
-          <!-- <canvas id="newsCanvas" width="700" height="150"></canvas> -->
+           <canvas id="newsCanvas" width="800px" height="200px" ></canvas>
          
 
 
@@ -98,18 +104,7 @@
 
   </div>
 
-<script>
-   // Canvas Output
-                    const canvas = document.getElementById("newsCanvas");
-                    const ctx = canvas.getContext("2d");
-                    ctx.font = "20px Segoe UI";
-                    ctx.fillStyle = "#000";
-                    ctx.fillText("Welcome to SingleMind News!", 20, 50);
-                    ctx.fillStyle = "red";
-                    ctx.fillText("No Ads. No Distractions. Just News.", 20, 100);
-</script>
 
-</script>
 
 <script>
   function openSidebar(){
@@ -120,7 +115,8 @@
     document.querySelector("#overlay").style.display="none"
     document.querySelector("#sidebar").style.left="-250px"
   }
-  function moduleNews(catNews){
+  function moduleNews(type,catNews){
+    localStorage.setItem("catagoryType",type)
     localStorage.setItem("catagory",catNews)
     location.href="./moduleNews.html"
   }
@@ -133,24 +129,98 @@
         tooltipShow,
         readData,
         catagoryNewsFunc,
+        getKeywords,
+        canvasShow,
         } from './commonscript.js'
 const  loggedInUser = localStorage.getItem("loggedInUser");
 const catagoryPage=localStorage.getItem("catagory")
-const matchArray=await getKeywords()
-console.log("match array",matchArray)
-async function getKeywords(){
-    const k=await fetch("./keywords.json").catch(err=>{console.log("Error occur while fetching keywords.json :",err)})
-    const data=await k.json()
-    return data[0][catagoryPage]
-}
+const catagoryPageType=localStorage.getItem("catagoryType")
+logoutButtonPressed()
+//detailopton******************************************starts
+let detailcon=document.querySelector(".detailoptions")
+let ul=document.querySelector(".detailoptions ul")
+let texthover=document.querySelectorAll(".navbar ul li a")
+let timer;
+texthover.forEach(ele=>{
+  ele.addEventListener("mouseenter",async event=>{
+    
+   clearTimeout(timer)
+    detailcon.innerHTML=""
+
+    detailcon.classList.add("detailoptions2")
+   
+    // console.log("this is eleemnt ",ele.textContent.toLocaleLowerCase())
+    let l=ele.textContent.toLocaleLowerCase()
+    const matchArrayDetailList=await getKeywords(l)
+    console.log("matchArrayDetailList is ",matchArrayDetailList)
+      matchArrayDetailList.forEach(ele=>{
+        // console.log("element is inserting: ",ele)
+      let li=document.createElement("li")
+     li.classList.add("list_detail")
+     li.innerHTML=`<a href="#" onclick='moduleNews("narrow","${ele}")'>${ele}</a>`
+     detailcon.appendChild(li)
+     
+      })
+
+
+  })
+   ele.addEventListener("mouseleave",event=>{
+    
+     timer=setTimeout(() => {
+      console.log("Event is : ",event)
+     detailcon.classList.remove("detailoptions2")
+     detailcon.innerHTML=""
+      
+     }, 100);
+    
+  })
+})
+detailcon.addEventListener("mouseenter",()=>{
+  clearTimeout(timer);
+  
+})
+detailcon.addEventListener("mouseleave",()=>{
+  detailcon.classList.remove("detailoptions2")
+     detailcon.innerHTML=""
+  
+
+})
+
+//detailopton******************************************ends
+
+
+
+
+
+
+
+
+
+
+
+
+
+const matchArray=await getKeywords(catagoryPage)
+// console.log("match array",matchArray)
+
  function checkStatus(catagoryNews){
-        let k=false
+  if(catagoryPageType=="broad"){
+     let k=false
      
         matchArray.forEach(element => {
             if(element==catagoryNews)
             k=true    
         });
         return k
+
+  }
+  if(catagoryPageType=="narrow")
+  {
+    let k=false
+    k=catagoryNews==catagoryPage?true:false
+    return k;
+  }
+       
       }
 // const loggedInUser="manoj"
 console.log("checking session ",loggedInUser)
@@ -196,10 +266,10 @@ console.log("k is ",typeof(k), k)
   //step1 use rssUrl ********************************fetching news**************************************
     let urlArray=k
     let count=0;
-    let rssUrl = urlArray[count].url;
-    while(rssUrl){
-    count++
-    // console.log(" the current fetching url is ",rssUrl)
+    let rssUrl;
+for(count=0;count<urlArray.length;count++){
+      
+    rssUrl = urlArray[count].url;
 
                    
   // Step 2: Use rss2json proxy to get JSON data
@@ -216,6 +286,7 @@ console.log("k is ",typeof(k), k)
       //****************************************work to have catagory starts********************
       const link=data.feed.link
          let catagoryNews=catagoryNewsFunc(link)
+         
     //not using linkArray
       
 
@@ -267,12 +338,19 @@ imgDraggingStarts(row,news,link,catagoryNews)
     .catch(error => {
       console.error('Error fetching news:', error);
     });
-rssUrl = urlArray[count].url;  
 }
 }
 
-caller()
 imgDraggingStartsRemaining(db,loggedInUser)
+
+async function a(){
+ await caller()
+  console.log("before canvasshow****************************8888")
+  canvasShow(catagoryPage)
+  console.log("after canvasshow************************")
+}
+a()
+
 
 </script>
            

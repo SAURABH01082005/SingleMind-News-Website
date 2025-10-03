@@ -147,6 +147,7 @@ export async function logoutButtonPressed() {
       console.log("user session remove and logout..........")
       event.preventDefault(); 
       location.replace('login2.html')
+    //  location.href = "login2.html?nocache=" + Date.now();
       // window.location.href="./login2.html"//not working ...
     })
     
@@ -160,5 +161,76 @@ export function catagoryNewsFunc(link){
       if(!linkArray[linkArray.length-1]){
         catagoryNews=linkArray[linkArray.length-2]
       }
+      let test=catagoryNews.split(".")
+      if(test.length>=2) catagoryNews="unkown"
       return catagoryNews
 }
+
+export async function getKeywords(catagoryPage){
+    const k=await fetch("./keywords.json").catch(err=>{console.log("Error occur while fetching keywords.json :",err)})
+    const data=await k.json()
+    return data[0][catagoryPage]
+}
+
+
+export function canvasShow(catagoryPage) {
+    const canvas = document.getElementById("newsCanvas");
+    const ctx = canvas.getContext("2d");
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // clear canvas before drawing
+    ctx.textAlign = "center"; // center text horizontally
+    ctx.textBaseline = "top"; // aligns text from top
+
+    const centerX = canvas.width / 2;
+    let startY = 50;
+    const lineHeight = 50;
+
+    // ---------------- First line: italic, bold, gradient, shadow ----------------
+    ctx.font = "italic bold 28px Segoe UI";
+
+    // Create gradient
+    const gradient1 = ctx.createLinearGradient(0, startY, canvas.width, startY + 30);
+    gradient1.addColorStop(0, "#ff7f50"); // coral
+    gradient1.addColorStop(1, "#ff1493"); // deep pink
+    ctx.fillStyle = gradient1;
+
+    // Add shadow
+    ctx.shadowColor = "rgba(0,0,0,0.3)";
+    ctx.shadowOffsetX = 2;
+    ctx.shadowOffsetY = 2;
+    ctx.shadowBlur = 4;
+
+    ctx.fillText("Add Rss link of "+catagoryPage.toUpperCase()+" news in Feeder!", centerX, startY);
+
+    // ---------------- Second line: normal font, subtle shadow ----------------
+    startY += lineHeight;
+    ctx.font = "24px Segoe UI";
+    ctx.fillStyle = "#333"; // dark gray
+    ctx.shadowColor = "rgba(0,0,0,0.2)";
+    ctx.shadowOffsetX = 1;
+    ctx.shadowOffsetY = 1;
+    ctx.shadowBlur = 2;
+
+    ctx.fillText("Welcome to SingleMind News!", centerX, startY);
+
+    // ---------------- Third line: red gradient with shadow ----------------
+    startY += lineHeight;
+    ctx.font = "22px Segoe UI";
+    const gradient2 = ctx.createLinearGradient(0, startY, canvas.width, startY + 30);
+    gradient2.addColorStop(0, "#ff0000");
+    gradient2.addColorStop(1, "#ff4500");
+    ctx.fillStyle = gradient2;
+
+    ctx.shadowColor = "rgba(0,0,0,0.3)";
+    ctx.shadowOffsetX = 1;
+    ctx.shadowOffsetY = 1;
+    ctx.shadowBlur = 3;
+
+    ctx.fillText("No Ads. No Distractions. Just News.", centerX, startY);
+
+    // Show canvas if table is empty
+    const tbody = document.querySelector("#newsTable tbody");
+    if (!tbody.rows.length) canvas.style.display = "block";
+}
+
+

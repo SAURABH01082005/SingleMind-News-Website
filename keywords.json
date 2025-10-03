@@ -1,10 +1,70 @@
 [
     {
-        "science":["science","education"],
-        "technology":["tech","technology"],
-        "health":["health"],
-        "sports":["sports"],
-        "world":["world"],
-        "business":["business"]
-    }
+  "world": [
+    "world", "international", "global", "war", "conflict",
+    "breaking", "breaking news", "latest", "top stories",
+    "weather", "climate change", "storms", "floods", "natural disasters"
+  ],
+  "national": [
+    "national", "india", "us", "uk", "regional", "local", "domestic"
+  ],
+  "politics": [
+    "politics", "government", "elections", "parliament", "diplomacy",
+    "society", "crime", "law", "courts", "human rights", "immigration",
+    "religion", "faith", "social issues",
+    "opinion", "editorial", "analysis", "columns", "blogs", "letters", "fact check", "commentary"
+  ],
+  "business": [
+    "business", "economy", "markets", "stock market", "corporates", "industry",
+    "finance", "money", "banking", "insurance", "real estate", "jobs",
+    "careers", "employment", "startups"
+  ],
+  "science_tech": [
+    "science", "space", "nature", "research", "education", "environment",
+    "climate", "agriculture",
+    "technology", "tech", "gadgets", "reviews", "innovation", "ai", "cybersecurity", "apps", "digital"
+  ],
+  "health": [
+    "health", "medicine", "covid", "pandemic", "diseases", "fitness", "wellness", "medical"
+  ],
+  "lifestyle": [
+    "sports", "cricket", "football", "soccer", "tennis", "olympics", "basketball", "athletics", "hockey", "rugby",
+    "entertainment", "movies", "films", "tv", "streaming", "music", "celebrities", "bollywood", "hollywood",
+    "lifestyle", "travel", "food", "recipes", "fashion", "style", "relationships", "culture", "arts", "books",
+    "obituaries", "tributes"
+  ]
+}
+,
+    {
+  "science": ["science", "education", "space", "research", "environment", "climate", "nature", "agriculture"],
+  "technology": ["technology", "tech", "gadgets", "reviews", "innovation", "ai", "cybersecurity", "apps", "digital"],
+  "health": ["health", "medicine", "covid", "pandemic", "diseases", "fitness", "wellness", "medical"],
+  "sports": ["sports", "cricket", "football", "soccer", "tennis", "basketball", "hockey", "rugby", "athletics", "olympics"],
+  "world": ["world", "international", "global", "foreign", "diplomacy", "war", "conflict"],
+  "business": ["business", "economy", "markets", "stock market", "finance", "money", "industry", "corporates", "real estate", "banking", "insurance", "startups", "careers", "jobs"],
+  "entertainment": ["entertainment", "movies", "films", "tv", "streaming", "music", "celebrities", "hollywood", "bollywood", "arts", "culture"],
+  "national": ["national", "india", "us", "uk", "regional", "local", "domestic"],
+  "society": ["society", "politics", "government", "elections", "law", "courts", "crime", "human rights", "immigration", "religion", "social issues"],
+  "opinion": ["opinion", "editorial", "analysis", "columns", "blogs", "letters", "commentary", "fact check"]
+}
+
+,
+    {
+  "world": ["world", "international", "global", "war", "conflict"],
+  "national": ["national", "india", "us", "uk", "regional", "local"],
+  "politics": ["politics", "government", "elections", "parliament", "diplomacy"],
+  "business": ["business", "economy", "markets", "stock market", "corporates", "industry", "finance", "money", "banking", "insurance", "real estate", "jobs", "careers", "employment", "startups"],
+  "science": ["science", "space", "nature", "research", "education", "environment", "climate", "agriculture"],
+  "technology": ["technology", "tech", "gadgets", "reviews", "innovation", "ai", "cybersecurity", "apps"],
+  "health": ["health", "medicine", "covid", "pandemic", "diseases", "fitness"],
+  "sports": ["sports", "cricket", "football", "soccer", "tennis", "olympics", "basketball", "athletics", "hockey", "rugby"],
+  "entertainment": ["entertainment", "movies", "films", "tv", "streaming", "music", "celebrities", "bollywood", "hollywood"],
+  "lifestyle": ["lifestyle", "travel", "food", "recipes", "fashion", "style", "relationships", "culture", "arts", "books"],
+  "society": ["society", "crime", "law", "courts", "human rights", "immigration", "religion", "faith", "social issues"],
+  "opinion": ["opinion", "editorial", "analysis", "columns", "blogs", "letters", "fact check"],
+  "breaking": ["breaking", "breaking news", "latest", "top stories"],
+  "weather": ["weather", "climate change", "storms", "floods", "natural disasters"],
+  "obituaries": ["obituaries", "tributes"]
+}
+
 ]

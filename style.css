@@ -19,6 +19,7 @@ header {
   display: flex;
   flex-direction: row;
   position: relative;
+    z-index: 5;
 }
 
 header img{
@@ -45,12 +46,15 @@ header img{
   margin: 0px 50px 30px 0px;
 }
 .navbar ul{
+  position: relative;
   display: flex;
   
 }
+
 .navbar a{
   text-decoration: none; 
   color: #194a8d;
+  padding-bottom: 30px;
   
   padding-left: 50px;
   font-weight: bold;
@@ -193,7 +197,7 @@ html, body {
 
 /* Canvas styling */
 #newsCanvas {
-  display: block;
+  display: none;
   margin: 2rem auto;
   border-radius: 12px;
   background-color: #fff4cc;
@@ -322,4 +326,46 @@ html, body {
       opacity: 1;              /* fade in */
       transform: scale(1);
 
+    }
+
+    /* detailbox css */
+      .detailoptions{
+      position: absolute;
+      top: 45px;
+      left: 370px;
+      min-height: 0px;
+      max-height: fit-content;
+      width: 1100px;
+      border-radius: 20px;
+      background-color:#1E2A38;     
+      transition: all 0.4s ease;
+      z-index:2;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+       font-size: 1.2rem;
+      font-family: 'Montserrat', sans-serif;
+    }
+    .detailoptions2{
+      top:150px;
+      
+      
+
+    }
+    .list_detail a{
+      text-decoration: none;
+      color: inherit;
+      text-transform:  capitalize;
+    }
+    .list_detail{
+      list-style: none;
+      
+       /* color: #194A8D; */
+       color: #2060ba;
+      padding: 10px; 
+    }
+    .list_detail:hover{
+      /* color: #2060ba; */
+      color: #194A8D; 
     }
