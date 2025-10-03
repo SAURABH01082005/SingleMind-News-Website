@@ -29,8 +29,7 @@ header img{
 
 /* header */
 .content-wrapper {
-  /* background-color:#185D91; */
-   background: linear-gradient(to right, #ffff, #194A8D);
+  background: linear-gradient(to right, #ffff, #194A8D);
   min-height: 100vh;
 }
 
@@ -168,11 +167,14 @@ main {
 
 /* Footer */
 footer {
+  position:relative;
+  width: 100%;
   background-color: #222;
   color: white;
   text-align: center;
   padding: 1rem;
   margin-top: 3rem;
+  bottom: 0px;
 }
 
 
