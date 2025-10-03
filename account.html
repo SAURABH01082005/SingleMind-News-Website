@@ -115,6 +115,11 @@
   </script>
 
 <script type="module">  
+ import{logoutButtonPressed,
+        tooltipShow,
+        readData,
+        } from './commonscript.js'
+
 const  loggedInUser = localStorage.getItem("loggedInUser");
 // const loggedInUser="manoj kurmar yadav"
 console.log("checking session ",loggedInUser)
@@ -167,31 +172,9 @@ import {
 
 
 //**************fetching data rss**************
-async function myfunction(k) {
-    const docRef = doc(db, "users", loggedInUser);
-    try {
-      const docSnap = await getDoc(docRef);
 
-    if (docSnap.exists()) {
-      // console.log("Document data:", docSnap.data());
-      if(k=='urls') return docSnap.data().urls
-      if(k=='bookmarks') return docSnap.data().bookmarks
-      // console.log("function completed")
-      
-      
-    } else {
-
-      console.log("No such document!");
-    }
-      
-    } catch (error) {
-    console.log("some error")
-      
-    }
-  
-}
 async function caller(params) {
- const bookmarks= await myfunction("bookmarks");
+ const bookmarks= await readData("bookmarks",db,loggedInUser);
  tableBody.innerHTML = "";
 // console.log("bookmarks is ",typeof(bookmarks), bookmarks)
 bookmarks.forEach(async k => {
@@ -213,8 +196,8 @@ bookmarks.forEach(async k => {
 
         
         const catagoryNews=news.catagoryNews
-        const showmylink=news.showmylink
-        const link=news.link
+        const link=news.showmylink
+        const showlinkUrl=news.link
         console.log(catagoryNews)
 
         // Other columns// appending rest of data
@@ -236,34 +219,7 @@ bookmarks.forEach(async k => {
         tableBody.appendChild(row);//row append
 
         //adding news link info starts*******************
-
-
-        let showlink=document.querySelector('.showlink'); 
-        row.addEventListener("mouseover",(event)=>{
-          showlink.innerHTML = `<a href='${link}' style='text-decoration: none;color:black;'>${showmylink}</a>`;
-          showlink.style.display='block'
-          // showlink.style.pointerEvents = "none"; 
-          document.body.appendChild(showlink)
-          moveTooltip(event);
-
-
-        })
-
-
-        row.addEventListener("mouseout", () => {
-          showlink.style.display='none';
-
-        });
-        showlink.addEventListener("mouseover",(event)=>{
-          showlink.style.display='block';
-          //  console.log("hovering in showlingk box")
-
-        })
-
-        function moveTooltip(event){
-          showlink.style.top=(event.pageY+10) +"px"
-          showlink.style.left=(event.pageX+10)+"px"
-        }
+         tooltipShow(row,showlinkUrl,link)
         //adding news link info ends*******************
 
 
@@ -279,7 +235,7 @@ caller()
     tableBody.addEventListener('click', async function(event) {
       if(event.target.classList.contains('delete-btn')) {
         const row = event.target.closest('tr');
-        // console.log("the row is ",row)
+        console.log("the row is ",row)
 
         // console.log("this.row is ",row.cells[2].innerText)
         let discription=row.cells[2].innerText
@@ -295,7 +251,7 @@ caller()
 
 
       async function removeData(params) {
-          const bookmarks= await myfunction("bookmarks")
+          const bookmarks= await readData("bookmarks",db,loggedInUser);
          
           for (let element of bookmarks)  {
            

@@ -123,6 +123,7 @@ try {
 if (docSnap.exists()) {
   console.log("Document data:", docSnap.data());
   if(k=='urls') return docSnap.data().urls
+  if(k=='bookmarks') return docSnap.data().bookmarks
   
    
 } else {
