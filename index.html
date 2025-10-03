@@ -104,6 +104,7 @@
                     ctx.fillStyle = "red";
                     ctx.fillText("No Ads. No Distractions. Just News.", 20, 100);
 </script>
+
 <script>
   function openSidebar(){
     document.querySelector("#sidebar").style.left="0px"
@@ -113,23 +114,20 @@
     document.querySelector("#overlay").style.display="none"
     document.querySelector("#sidebar").style.left="-250px"
   }
+    
 </script>
-  <script>
-    let logoutpage=document.getElementById("logoutpage")
-    logoutpage.addEventListener("click",(event)=>{
-      localStorage.removeItem("loggedInUser")
-      console.log("user session remove and logout..........")
-      event.preventDefault(); 
-      location.replace('login2.html')
-      // window.location.href="./login2.html"//not working ...
-    })
-  </script>
-
-
 <script type="module">
+  import{logoutButtonPressed,imgDraggingStarts,
+        imgDraggingStartsRemaining,
+        tooltipShow,
+        readData,
+        } from './commonscript.js'
+
+
 const  loggedInUser = localStorage.getItem("loggedInUser");
 // const loggedInUser="manoj"
-console.log("checking session ",loggedInUser)
+console.log("Session is created of user ",loggedInUser)
+logoutButtonPressed()
 
 
   //**********************************firebase sdks ****************************************
@@ -163,31 +161,9 @@ import {
 
 
 //**************fetching data rss**************
-async function myfunction(k) {
-const docRef = doc(db, "users", loggedInUser);
-try {
-  const docSnap = await getDoc(docRef);
-
-if (docSnap.exists()) {
-  console.log("Document data:", docSnap.data());
-  if(k=='urls') return docSnap.data().urls
-  
-   
-} else {
-
-  console.log("No such document!");
-}
-  
-} catch (error) {
- console.log("some error")
-  
-}
-  
-}
 async function caller(params) {
-  const k= await myfunction("urls");
+const k= await readData("urls",db,loggedInUser).catch(err =>{console.log("there is error",err)});
 console.log("k is ",typeof(k), k)
-
 
   //step1 use rssUrl ********************************fetching news**************************************
     let urlArray=k
@@ -259,59 +235,15 @@ console.log("k is ",typeof(k), k)
         `;
 
         tableBody.appendChild(row);//row append
-       
-        
+             
 //adding news link info starts*******************
-
-
-let showlink=document.querySelector('.showlink'); 
-row.addEventListener("mouseover",(event)=>{
-  showlink.innerHTML = `<a href='${showlinkUrl}' style='text-decoration: none;color:black;'>${link}</a>`;
-  showlink.style.display='block'
-  // showlink.style.pointerEvents = "none"; 
-  document.body.appendChild(showlink)
-  moveTooltip(event);
-
-
-})
-
-
-row.addEventListener("mouseout", () => {
-  showlink.style.display='none';
-
-});
-showlink.addEventListener("mouseover",(event)=>{
-   showlink.style.display='block';
-  //  console.log("hovering in showlingk box")
-
-})
-
-function moveTooltip(event){
-   showlink.style.top=(event.pageY+10) +"px"
-  showlink.style.left=(event.pageX+10)+"px"
-}
+console.log("arrived......")
+ tooltipShow(row,showlinkUrl,link)
 //adding news link info ends*******************
 
 //dragging the img---------------------------------starts
-let dragStoreBox=document.querySelector(".dragStoreBox")
-row.addEventListener("dragstart",(event)=>{
-  console.log("image is dragging-----------")
-  dragStoreBox.classList.add("showDragStore")
-  
-  console.log("after image is dragging")
-
-  event.dataTransfer.setData("text/plain", JSON.stringify(news))//dataTransfer only take string//convert obj into json format and then string
-  event.dataTransfer.setData("text/link", link)//dataTransfer only take string//convert obj into json format and then string
- 
-  event.dataTransfer.setData("text/catagoryNews",catagoryNews)
-  
-})
-
-
+imgDraggingStarts(row,news,link,catagoryNews)
 //dragging the img---------------------------------ends
-
-
-
 
         
       });
@@ -325,67 +257,9 @@ rssUrl = urlArray[count].url;
 
 
 caller()
-
-let dragStoreBox=document.querySelector(".dragStoreBox")
-dragStoreBox.addEventListener("dragover",(event)=>{
-  event.preventDefault()
-
-})
-dragStoreBox.addEventListener("drop",(event)=>{
-  dragStoreBox.classList.remove("showDragStore")
-  const droppedUrl = event.dataTransfer.getData("text/plain")
-  const link = event.dataTransfer.getData("text/link")
-  console.log("link is ",link)
-  const catagoryNews = event.dataTransfer.getData("text/catagoryNews")
-  let temp=JSON.parse(droppedUrl)
-  
-  temp.catagoryNews=catagoryNews
-  temp.showmylink=link
-  
-  console.log("this is before stringify showmylink ..............",temp.showmylink)
-
-  updateDrag(JSON.stringify(temp))//parsing required on other end
- 
- 
-  
-})  
-let body=document.querySelector("body")
-body.addEventListener("dragover", (event) => {
-  event.preventDefault(); // <-- required to allow dropping
-});
-body.addEventListener("drop",(event)=>{
-  console.log("dropping in body -----------")
-  event.preventDefault()
-  dragStoreBox.classList.remove("showDragStore")
-
-})
-
-async function updateDrag(k){
-  const docRef = await doc(db, "users", loggedInUser);
-  console.log("saved element is ",JSON.parse(k))
-  try {
-        await updateDoc(docRef, {
-        bookmarks: arrayUnion(k)
-        
-        
-        });
-        alert("successfully added")
-
-        } catch (error) {
-        console.log("Updation failed!!!",error)
-        alert("unsuccesfull")
-
-        }
-
-}
-
-
-
+imgDraggingStartsRemaining(db,loggedInUser)
 
 </script>
-
-
-
-              
+            
 </body>
 </html>

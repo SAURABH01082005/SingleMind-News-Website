@@ -13,6 +13,10 @@
           <!-- <h1>📰 SingleMind News</h1> -->
           <img src="./images/singlemind.png" alt="singlemindimg">
        
+          <!-- dragStoreBox -->
+           <div class="dragStoreBox"><p>Drop Here to Save!</p>
+              <img src="./images/royalborder.png" alt="image">
+            </div>
 
 
           <nav class="navbar">
@@ -74,6 +78,8 @@
             </div>
 
         </main>
+         <div class="showlink" >this is your link.........</div>
+
 
         <footer>
           <p>&copy; 2025 SingleMind News. All rights reserved.</p>
@@ -94,6 +100,13 @@
 </script>
 
 <script type="module">
+  import{logoutButtonPressed,imgDraggingStarts,
+        imgDraggingStartsRemaining,
+        tooltipShow,
+        readData,
+        } from './commonscript.js'
+
+
 const  loggedInUser = localStorage.getItem("loggedInUser");
 // const loggedInUser="manoj"
 console.log("checking session ",loggedInUser)
@@ -130,27 +143,9 @@ import {
 
 
 //**************fetching data rss**************
-async function myfunction() {
-const docRef = doc(db, "users", loggedInUser);
-try {
-  const docSnap = await getDoc(docRef);
 
-if (docSnap.exists()) {
-  console.log("Document data:", docSnap.data());
-  return docSnap.data().urls
-} else {
-  // docSnap.data() will be undefined in this case
-  console.log("No such document!");
-}
-  
-} catch (error) {
- console.log("some error")
-  
-}
-  
-}
 async function caller(params) {
-  const k= await myfunction();
+  const k= await readData("urls",db,loggedInUser);
 console.log("k is ",typeof(k), k)
 
 
@@ -192,6 +187,7 @@ console.log("k is ",typeof(k), k)
       //****************************************work to have catagory ends********************
       if(catagoryNews.toLowerCase()=="business"){
         data.items.forEach(news => {
+        let showlinkUrl=news.link;
         const row = document.createElement('tr');
 
         // Image cell
@@ -220,31 +216,12 @@ console.log("k is ",typeof(k), k)
         tableBody.appendChild(row);//row append
         
 //adding news link info starts*******************
-row.addEventListener("mouseover", (event) => {
-  const tooltip = document.createElement("div");
-  tooltip.innerHTML = `<a href='${link}' style='text-decoration: none;color:white;'>${link}</a>`;
-  tooltip.style.position = "absolute";
-  tooltip.style.background = "#333";
-  tooltip.style.color = "#fff";
-  tooltip.style.padding = "5px";
-  tooltip.style.borderRadius = "4px";
-  tooltip.style.fontSize = "12px";
-  tooltip.style.pointerEvents = "none"; // so it doesn't block mouse
-  tooltip.id = "customTooltip";
-
-  // Position tooltip 10px away from cursor
-  tooltip.style.top = (event.pageY + 10) + "px";
-  tooltip.style.left = (event.pageX + 10) + "px";
-
-  document.body.appendChild(tooltip);
-});
-
-row.addEventListener("mouseout", () => {
-  const tooltip = document.getElementById("customTooltip");
-  if (tooltip) tooltip.remove();
-});
-
+ tooltipShow(row,showlinkUrl,link)
 //adding news link info ends*******************
+//dragging the img---------------------------------starts
+imgDraggingStarts(row,news,link,catagoryNews)
+//dragging the img---------------------------------ends
+
 
         
       });
@@ -258,7 +235,7 @@ rssUrl = urlArray[count].url;
 }
 
 caller()
-
+imgDraggingStartsRemaining(db,loggedInUser)
 
 
 
