@@ -11,24 +11,35 @@
   <div class="content-wrapper">
         <header>
           <!-- <h1>📰 SingleMind News</h1> -->
+           <img src="./images/hamburgur.png" id="hamburgur" alt="hamburgur" onclick="openSidebar()">
           <img src="./images/singlemind.png" alt="singlemindimg">
-        <!-- dragStoreBox -->
+
+            <div id="sidebar" class="sidebar">
+              <a href="#">🏠 Home</a>
+              <a href="#">🔥 Trending</a>
+              <a href="#">📺 Subscriptions</a>
+              <a href="#">⭐ Library</a>
+            </div>
+            <!-- Overlay -->
+            <div id="overlay" class="overlay" onclick="closeSidebar()"></div>
+          <!-- dragStoreBox -->
            <div class="dragStoreBox"><p>Drop Here to Save!</p>
               <img src="./images/royalborder.png" alt="image">
             </div>
-
+       
 
 
           <nav class="navbar">
           <ul>
             <li><a href="index.html" class="active">Home</a></li>
 
-            <li><a href="World.html">World</a></li>
-            <li><a href="Technology.html">Technology</a></li>
-            <li><a href="Business.html">Business</a></li>
-            <li><a href="Science.html">Science</a></li>
-            <li><a href="Health.html">Health</a></li>
-            <li><a href="Sports.html">Sports</a></li>
+            <li><a href="#" onclick="moduleNews('world')">World</a></li>
+            <li><a href="#" onclick="moduleNews('technology')" >Technology</a></li>
+            <li><a href="#" onclick="moduleNews('business')">Business</a></li>
+            <li><a href="#" onclick="moduleNews('science')">Science</a></li>
+            <li><a href="#" onclick="moduleNews('health')">Health</a></li>
+            <li><a href="#" onclick="moduleNews('sports')">Sports</a></li>
+            
             
 
           </ul>
@@ -78,8 +89,7 @@
             </div>
 
         </main>
-         <div class="showlink" >this is your link.........</div>
-
+        <div class="showlink" >this is your link.........</div>
 
         <footer>
           <p>&copy; 2025 SingleMind News. All rights reserved.</p>
@@ -99,6 +109,24 @@
                     ctx.fillText("No Ads. No Distractions. Just News.", 20, 100);
 </script>
 
+</script>
+
+<script>
+  function openSidebar(){
+    document.querySelector("#sidebar").style.left="0px"
+    document.querySelector("#overlay").style.display="block"
+  }
+  function closeSidebar(){
+    document.querySelector("#overlay").style.display="none"
+    document.querySelector("#sidebar").style.left="-250px"
+  }
+  function moduleNews(catNews){
+    localStorage.setItem("catagory",catNews)
+    location.href="./moduleNews.html"
+  }
+    
+</script>
+
 <script type="module">
     import{logoutButtonPressed,imgDraggingStarts,
         imgDraggingStartsRemaining,
@@ -106,8 +134,24 @@
         readData,
         catagoryNewsFunc,
         } from './commonscript.js'
-        
 const  loggedInUser = localStorage.getItem("loggedInUser");
+const catagoryPage=localStorage.getItem("catagory")
+const matchArray=await getKeywords()
+console.log("match array",matchArray)
+async function getKeywords(){
+    const k=await fetch("./keywords.json").catch(err=>{console.log("Error occur while fetching keywords.json :",err)})
+    const data=await k.json()
+    return data[0][catagoryPage]
+}
+ function checkStatus(catagoryNews){
+        let k=false
+     
+        matchArray.forEach(element => {
+            if(element==catagoryNews)
+            k=true    
+        });
+        return k
+      }
 // const loggedInUser="manoj"
 console.log("checking session ",loggedInUser)
 
@@ -171,14 +215,16 @@ console.log("k is ",typeof(k), k)
       const tableBody = document.querySelector('#newsTable tbody');
       //****************************************work to have catagory starts********************
       const link=data.feed.link
-        let catagoryNews=catagoryNewsFunc(link)
+         let catagoryNews=catagoryNewsFunc(link)
     //not using linkArray
       
 
       //****************************************work to have catagory ends********************
-      if(catagoryNews.toLowerCase()=="world"){
+
+      
+      if(checkStatus(catagoryNews.toLowerCase())){
         data.items.forEach(news => {
-          let showlinkUrl=news.link;
+           let showlinkUrl=news.link;
         const row = document.createElement('tr');
 
         // Image cell
@@ -213,6 +259,7 @@ console.log("k is ",typeof(k), k)
 imgDraggingStarts(row,news,link,catagoryNews)
 //dragging the img---------------------------------ends
 
+
         
       });
       }
@@ -226,8 +273,6 @@ rssUrl = urlArray[count].url;
 
 caller()
 imgDraggingStartsRemaining(db,loggedInUser)
-
-
 
 </script>
 

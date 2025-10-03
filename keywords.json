@@ -1,0 +1,10 @@
+[
+    {
+        "science":["science","education"],
+        "technology":["tech","technology"],
+        "health":["health"],
+        "sports":["sports"],
+        "world":["world"],
+        "business":["business"]
+    }
+]

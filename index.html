@@ -34,12 +34,12 @@
           <ul>
             <li><a href="index.html" class="active">Home</a></li>
 
-            <li><a href="World.html">World</a></li>
-            <li><a href="Technology.html">Technology</a></li>
-            <li><a href="Business.html">Business</a></li>
-            <li><a href="Science.html">Science</a></li>
-            <li><a href="Health.html">Health</a></li>
-            <li><a href="Sports.html">Sports</a></li>
+            <li><a href="#" onclick="moduleNews('world')">World</a></li>
+            <li><a href="#" onclick="moduleNews('technology')" >Technology</a></li>
+            <li><a href="#" onclick="moduleNews('business')">Business</a></li>
+            <li><a href="#" onclick="moduleNews('science')">Science</a></li>
+            <li><a href="#" onclick="moduleNews('health')">Health</a></li>
+            <li><a href="#" onclick="moduleNews('sports')">Sports</a></li>
             
             
 
@@ -113,6 +113,10 @@
   function closeSidebar(){
     document.querySelector("#overlay").style.display="none"
     document.querySelector("#sidebar").style.left="-250px"
+  }
+  function moduleNews(catNews){
+    localStorage.setItem("catagory",catNews)
+    location.href="./moduleNews.html"
   }
     
 </script>

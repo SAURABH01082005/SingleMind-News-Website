@@ -143,6 +143,7 @@ export async function logoutButtonPressed() {
     let logoutpage=document.getElementById("logoutpage")
     logoutpage.addEventListener("click",(event)=>{
       localStorage.removeItem("loggedInUser")
+      localStorage.removeItem("catagory")
       console.log("user session remove and logout..........")
       event.preventDefault(); 
       location.replace('login2.html')
