@@ -215,6 +215,7 @@ console.log("k is ",typeof(k), k)
     let urlArray=k
     let count=0;
     let rssUrl;
+    if(!urlArray) return;
 for(count=0;count<urlArray.length;count++){
       
     rssUrl = urlArray[count].url;

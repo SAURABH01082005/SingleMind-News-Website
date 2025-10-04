@@ -199,7 +199,8 @@ export function canvasShow(catagoryPage) {
     ctx.shadowOffsetY = 2;
     ctx.shadowBlur = 4;
 
-    ctx.fillText("Add Rss link of "+catagoryPage.toUpperCase()+" news in Feeder!", centerX, startY);
+    if(catagoryPage=="mybookmarks") ctx.fillText("Drag and Drop the News to Add in BookMarks!", centerX, startY);
+    else ctx.fillText("Add Rss link of "+catagoryPage.toUpperCase()+" news in Feeder!", centerX, startY);
 
     // ---------------- Second line: normal font, subtle shadow ----------------
     startY += lineHeight;
@@ -256,7 +257,7 @@ export function scrollTop(){
 }
 
 
-export function showDetailOptions(){
+export async function showDetailOptions(){
   let detailcon=document.querySelector(".detailoptions")
 let ul=document.querySelector(".detailoptions ul")
 let texthover=document.querySelectorAll(".navbar ul li a")

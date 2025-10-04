@@ -159,6 +159,7 @@
         tooltipShow,
         readData,
         scrollTop,
+        canvasShow,
         } from './commonscript.js'
 
 scrollTop()
@@ -248,6 +249,7 @@ async function caller(params) {
  let tableBody=document.querySelector("tbody")
  tableBody.innerHTML = "";
 // console.log("bookmarks is ",typeof(bookmarks), bookmarks)
+if(!bookmarks) return;
 bookmarks.forEach(async k => {
   
   let news= JSON.parse(k)
@@ -299,7 +301,13 @@ bookmarks.forEach(async k => {
 
 }
 
-caller()
+async function a(){
+  await caller()
+  console.log("*****************888testing*******************")
+  let catagoryPage="mybookmarks"
+  canvasShow(catagoryPage)
+}
+a()
  const tableBody = document.querySelector("tbody");
 
     // Event delegation to handle delete buttons
