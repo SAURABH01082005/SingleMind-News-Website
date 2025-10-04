@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   
+    <title>Contact Us - SingleMind News</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #222222;
+            --secondary-color: #3b82f6;
+            --accent-color: #333333;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --border-color: #e5e7eb;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        header .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.875rem;
+            font-weight: 700;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 2rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        nav a:hover {
+            color: var(--accent-color);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 1rem;
+        }
+        .contact-content {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 3rem;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 2rem;
+        }
+        .contact-content h1 {
+            color: var(--primary-color);
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        label {
+            margin-top: 1rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        input, textarea {
+            padding: 0.875rem;
+            margin-top: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+            background: var(--bg-secondary);
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+        button {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: translateY(-1px);
+        }
+        .contact-info {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+        .contact-info p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            margin: 0.5rem 0;
+        }
+        .chat-section {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+        .chat-section h2 {
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .chat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        .chat-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+        .chat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+        .chat-image {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            margin: 0 auto 1rem;
+            font-weight: 300;
+        }
+        .chat-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+        .chat-role {
+            font-size: 0.95rem;
+            color: var(--secondary-color);
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        .chat-status {
+            font-size: 0.875rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+        .chat-btn {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: transform 0.2s;
+            width: 100%;
+        }
+        .chat-btn:hover {
+            transform: translateY(-1px);
+        }
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 4rem;
+        }
+        @media (max-width: 768px) {
+            header .container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            nav a {
+                margin-left: 0;
+                margin-right: 1rem;
+            }
+            .contact-content {
+                padding: 2rem;
+            }
+            .contact-content h1 {
+                font-size: 2rem;
+            }
+            .chat-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>SingleMind News</h1>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="account.html">Account</a>
+            </nav>
+        </div>
+    </header>
+    <div class="container">
+        <div class="contact-content">
+            <h1>Contact Us</h1>
+            <form action="#" method="post">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+                
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                
+                <label for="subject">Subject:</label>
+                <input type="text" id="subject" name="subject" required>
+                
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" rows="5" required></textarea>
+                
+                <button type="submit">Send Message</button>
+            </form>
+            <div class="contact-info">
+                <p>Or reach us directly:</p>
+                <p>Email: info@singlemindnews.com</p>
+                <p>Phone: (123) 456-7890</p>
+                <p>Address: 123 News Street, Media City, MC 12345</p>
+            </div>
+            <div class="chat-section">
+                <h2>Live Chat Support</h2>
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem;">Connect instantly with our support team for quick assistance.</p>
+                <div class="chat-grid">
+                    <div class="chat-card">
+                        <div class="chat-image">S</div>
+                        <h3 class="chat-name">Saurabh Yadav</h3>
+                        <p class="chat-role">Customer Support Lead</p>
+                        <p class="chat-status">Available Now</p>
+                        <button class="chat-btn">Start Chat</button>
+                    </div>
+                    <div class="chat-card">
+                        <div class="chat-image">A</div>
+                        <h3 class="chat-name">Anay Deshpande</h3>
+                        <p class="chat-role">Tech Support Specialist</p>
+                        <p class="chat-status">Available Now</p>
+                        <button class="chat-btn">Start Chat</button>
+                    </div>
+                    <div class="chat-card">
+                        <div class="chat-image">C</div>
+                        <h3 class="chat-name">Cion Koli</h3>
+                        <p class="chat-role">Account Manager</p>
+                        <p class="chat-status">Available Now</p>
+                        <button class="chat-btn">Start Chat</button>
+                    </div>
+                    <div class="chat-card">
+                        <div class="chat-image">H</div>
+                        <h3 class="chat-name">Mohammed Hashir</h3>
+                        <p class="chat-role">News Subscription Expert</p>
+                        <p class="chat-status">Available Now</p>
+                        <button class="chat-btn">Start Chat</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        &copy; 2025 SingleMind News. All rights reserved.
+    </footer>
+</body>
+</html>

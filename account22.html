@@ -4,45 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Account - SingleMind News</title>
-  <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="commoncss.css">
+  <link rel="stylesheet" href="style.css">
   <style>
-   body {
-        font-family: Arial, sans-serif;
-        background: #0d1b2a;
-        color: white;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
+    body {
+      background: linear-gradient(to right, #18365b, #225192);
+      font-family: Arial, sans-serif;
+      color: #fff;
+      margin: 0;
+      padding: 0;
     }
-   
-    .content-wrapper-inside {
-        /* position: absolute; */
-        margin:auto;
-      margin-top: 70px;
-      max-width: 1400px;
+
+    .account-container {
+      max-width: 1200px;
+      margin: 80px auto;
       background: #fff;
       color: #222;
-      background-color: #cccccc;
       border-radius: 12px;
       box-shadow: 0px 4px 15px rgba(0,0,0,0.3);
-      
-    }
-   .content-wrapper-inside main{
-    max-width: 1400px;
-        width: 1360px;
-    }
-    .table-wrapper{
-        margin: auto;
-        width: 95%;
-
+      padding: 30px;
     }
 
     .account-header {
       text-align: center;
-   
-      margin-top: 40px;
+      margin-bottom: 30px;
     }
 
     .account-header h2{
@@ -55,6 +40,33 @@
       color: #555;
       margin-top: 8px;
     }
+
+    .bookmark-list {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .bookmark-list th, .bookmark-list td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+
+    .bookmark-list th {
+      background: #225192;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .bookmark-list tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+
+    .bookmark-list img {
+      width: 120px;
+      border-radius: 6px;
+    }
+
     .delete-btn {
       background-color: #ff4d4d;
       border: none;
@@ -67,99 +79,48 @@
     .delete-btn:hover {
       background-color: #e60000;
     }
-        header {
-        background: #194A8D;
-        padding: 15px 20px;
-        text-align: center;
-        font-size: 1.5rem;
-        font-weight: bold;
-        letter-spacing: 2px;
-        height: 80px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-       
-    }
-    .trash{
-      position: absolute;
-      left: 1250px;
-      top: 220px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 50px;
-      width: 200px;
-      cursor: pointer;
-
-    }
-    .trash img{
-      height:40px;
-      max-width: 60px;
-    }
-
   </style>
 </head>
 <body>
-    <header>SingleMind News - Account Panel</header>
 
-  <div class="content-wrapper">
-    <div class="content-wrapper-inside">
-        <div class="account-header">
+  <div class="account-container">
+    <div class="account-header">
       <h2 >👤<span class="username">My Account</span></h2>
       <p>Welcome back, <span class="username">John Doe</span></p>
     </div>
 
     <h3>🔖 My Bookmarked News</h3>
-    <div class="trash"><img src="./images/trash.png" alt="png" ><p>Delete Account</p></div>
-   <main id="news-container">
-          
-          <canvas id="newsCanvas" width="800px" height="200px" ></canvas>
-         
-
-
-            <div class="table-wrapper">
-              <table id="newsTable">
-                <thead>
-                  <tr>
-                    <th>Image</th>
-                    <th>Title</th>
-                    <th>Summary</th>
-                    <th>Category</th>
-                    <th>Date</th>
-                    <th>Actions</th> 
-                  </tr>
-                </thead>
-                <tbody>
-                  <!-- JS will insert rows -->
-
-                </tbody>
-              </table>
-            </div>
-
-        </main>
-    </div>
-         <div class="showlink" >this is your link.........</div>
-         <button id="scrollTopBtn">⬆ Top</button>
-
-        
-      <footer>
-          <p>&copy; 2025 SingleMind News. All rights reserved.</p>
-        </footer> 
+    <table class="bookmark-list">
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Title</th>
+          <th>Summary</th>
+          <th>Category</th>
+          <th>Date</th>
+          <th>Actions</th> <!-- Added Actions column -->
+        </tr>
+      </thead>
+      <tbody id="bookmarkTableBody">
+       
+      </tbody>
+    </table>
   </div>
-  
+  <div class="showlink" >this is your link.........</div>
+  <footer> <p>&copy; 2025 SingleMind News. All rights reserved.</p>
+        </footer> 
 
   <script>
+   
+
   </script>
 
 <script type="module">  
  import{logoutButtonPressed,
         tooltipShow,
         readData,
-        scrollTop,
         } from './commonscript.js'
 
-scrollTop()
 const  loggedInUser = localStorage.getItem("loggedInUser");
 // const loggedInUser="manoj kurmar yadav"
 console.log("checking session ",loggedInUser)
@@ -189,8 +150,7 @@ import {
   getDoc,
   updateDoc,
   arrayUnion,
-  arrayRemove,
-  deleteDoc,
+  arrayRemove
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
   
@@ -210,36 +170,12 @@ import {
   const db = getFirestore(app);
    
 
-//deleting account **********************************************starts**********
-async function deleteAccount(event){
-  const docRef=doc(db,"users",loggedInUser)
-  try{
-    console.log("**************888testing*************88")
-    await deleteDoc(docRef)
-    alert("Account Deleted and Logout Succesfully")
-    localStorage.clear();
-    event.preventDefault(); 
-    location.replace('login2.html')
 
-  }catch (err){
-    console.log("Error while deleting , not deleted ,err is : ",err)
-
-  }
-  
-
-}
-let delaccount=document.querySelector(".trash")
-delaccount.addEventListener("click",(event)=>{
-  deleteAccount(event)
-})
-
-//deleting account **********************************************ends**********
 
 //**************fetching data rss**************
 
 async function caller(params) {
  const bookmarks= await readData("bookmarks",db,loggedInUser);
- let tableBody=document.querySelector("tbody")
  tableBody.innerHTML = "";
 // console.log("bookmarks is ",typeof(bookmarks), bookmarks)
 bookmarks.forEach(async k => {
@@ -294,7 +230,7 @@ bookmarks.forEach(async k => {
 }
 
 caller()
- const tableBody = document.querySelector("tbody");
+ const tableBody = document.getElementById('bookmarkTableBody');
 
     // Event delegation to handle delete buttons
     tableBody.addEventListener('click', async function(event) {

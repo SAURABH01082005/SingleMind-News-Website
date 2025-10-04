@@ -142,8 +142,7 @@ if (docSnap.exists()) {
 export async function logoutButtonPressed() {
     let logoutpage=document.getElementById("logoutpage")
     logoutpage.addEventListener("click",(event)=>{
-      localStorage.removeItem("loggedInUser")
-      localStorage.removeItem("catagory")
+      localStorage.clear()
       console.log("user session remove and logout..........")
       event.preventDefault(); 
       location.replace('login2.html')
