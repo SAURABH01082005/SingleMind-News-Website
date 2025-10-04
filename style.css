@@ -1,10 +1,4 @@
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 body {
   font-family: 'Segoe UI', sans-serif;
   background-color: #f9f9fb;
@@ -31,6 +25,8 @@ header img{
 .content-wrapper {
   background: linear-gradient(to right, #ffff, #194A8D);
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 
@@ -161,38 +157,12 @@ main {
   max-width: 1200px;
   margin: 2rem auto;
   padding: 0 1rem;
+  flex:1;
 }
 
 
 
-/* Footer */
-footer {
-  position:relative;
-  width: 100%;
-  background-color: #222;
-  color: white;
-  text-align: center;
-  padding: 1rem;
-  margin-top: 3rem;
-  bottom: 0px;
-}
-
-
-
-html, body {
-  overflow-x: hidden;
-  overflow-y: auto;
-  width: 100%;
-}
-
-
-html, body {
-  overflow-x: hidden;
-  margin: 0;
-  padding: 0;
-}
-
-
+/* Footer on commoncss.css*/
 
 
 /* =================================================================================== */
@@ -371,3 +341,5 @@ html, body {
       /* color: #2060ba; */
       color: #194A8D; 
     }
+
+

@@ -230,7 +230,87 @@ export function canvasShow(catagoryPage) {
 
     // Show canvas if table is empty
     const tbody = document.querySelector("#newsTable tbody");
-    if (!tbody.rows.length) canvas.style.display = "block";
+     //hidding table:
+    let table=document.getElementById("newsTable")
+  
+    if (!tbody.rows.length) canvas.style.display = "block",  table.style.display="none";
 }
 
 
+export function scrollTop(){
+    let scrollTopBtn=document.querySelector("#scrollTopBtn")
+  window.addEventListener("scroll",()=>{
+      if (document.documentElement.scrollTop > 200 || document.body.scrollTop > 200) {
+        scrollTopBtn.style.display = "block";
+      } else {
+        scrollTopBtn.style.display = "none";
+      }
+  })
+  scrollTopBtn.addEventListener("click",()=>{
+   
+    window.scrollTo({
+      top:0,
+      behavior:'smooth'
+    })
+  })
+  
+}
+
+
+export function showDetailOptions(){
+  let detailcon=document.querySelector(".detailoptions")
+let ul=document.querySelector(".detailoptions ul")
+let texthover=document.querySelectorAll(".navbar ul li a")
+let timer;
+texthover.forEach(ele=>{
+  ele.addEventListener("mouseenter",async event=>{
+    
+   clearTimeout(timer)
+    detailcon.innerHTML=""
+
+    detailcon.classList.add("detailoptions2")
+   
+    // console.log("this is eleemnt ",ele.textContent.toLocaleLowerCase())
+    let l=ele.textContent.toLocaleLowerCase()
+    const matchArrayDetailList=await getKeywords(l)
+    console.log("matchArrayDetailList is ",matchArrayDetailList)
+    matchArrayDetailList.forEach(ele=>{
+    // console.log("element is inserting: ",ele)
+    let li=document.createElement("li")
+     li.classList.add("list_detail")
+     li.innerHTML=`<a href="#" onclick='moduleNews("narrow","${ele}")'>${ele}</a>`
+     detailcon.appendChild(li)
+     
+      })
+
+
+  })
+   ele.addEventListener("mouseleave",event=>{
+    
+     timer=setTimeout(() => {
+      console.log("Event is : ",event)
+     detailcon.classList.remove("detailoptions2")
+     detailcon.innerHTML=""
+      
+     }, 100);
+    
+  })
+})
+detailcon.addEventListener("mouseenter",()=>{
+  clearTimeout(timer);
+  
+})
+detailcon.addEventListener("mouseleave",()=>{
+  detailcon.classList.remove("detailoptions2")
+     detailcon.innerHTML=""
+  
+
+})
+
+async function getKeywords(catagoryPage){
+    const k=await fetch("./keywords.json").catch(err=>{console.log("Error occur while fetching keywords.json :",err)})
+    const data=await k.json()
+    return data[0][catagoryPage]
+}
+
+}

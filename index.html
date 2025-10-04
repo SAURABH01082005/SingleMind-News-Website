@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SingleMind News</title>
   <link rel="stylesheet" href="style.css" />
-  
+  <link rel="stylesheet" href="./commoncss.css">
 </head>
 <body>
   <div class="content-wrapper">
@@ -93,13 +93,15 @@
         </main>
 
         <div class="showlink" >this is your link.........</div>
+         <button id="scrollTopBtn">⬆ Top</button>
 
-        <footer>
+        
+      <footer>
           <p>&copy; 2025 SingleMind News. All rights reserved.</p>
         </footer> 
-      
 
   </div>
+  
 
 <script>
   function openSidebar(){
@@ -115,16 +117,11 @@
     localStorage.setItem("catagory",catNews)
     location.href="./moduleNews.html"
   }
+
+
     
 </script>
 
-<script>
-  
-
-  
-
-
-</script>
 <script type="module">
   import{logoutButtonPressed,imgDraggingStarts,
         imgDraggingStartsRemaining,
@@ -133,6 +130,8 @@
         catagoryNewsFunc,
         getKeywords,
         canvasShow,
+        scrollTop,
+        showDetailOptions,
         } from './commonscript.js'
 
 
@@ -140,58 +139,8 @@ const  loggedInUser = localStorage.getItem("loggedInUser");
 // const loggedInUser="manoj"
 console.log("Session is created of user ",loggedInUser)
 logoutButtonPressed()
-
-
-
-let detailcon=document.querySelector(".detailoptions")
-let ul=document.querySelector(".detailoptions ul")
-let texthover=document.querySelectorAll(".navbar ul li a")
-let timer;
-texthover.forEach(ele=>{
-  ele.addEventListener("mouseenter",async event=>{
-    
-   clearTimeout(timer)
-    detailcon.innerHTML=""
-
-    detailcon.classList.add("detailoptions2")
-   
-    // console.log("this is eleemnt ",ele.textContent.toLocaleLowerCase())
-    let l=ele.textContent.toLocaleLowerCase()
-    const matchArrayDetailList=await getKeywords(l)
-    console.log("matchArrayDetailList is ",matchArrayDetailList)
-    matchArrayDetailList.forEach(ele=>{
-    // console.log("element is inserting: ",ele)
-    let li=document.createElement("li")
-     li.classList.add("list_detail")
-     li.innerHTML=`<a href="#" onclick='moduleNews("narrow","${ele}")'>${ele}</a>`
-     detailcon.appendChild(li)
-     
-      })
-
-
-  })
-   ele.addEventListener("mouseleave",event=>{
-    
-     timer=setTimeout(() => {
-      console.log("Event is : ",event)
-     detailcon.classList.remove("detailoptions2")
-     detailcon.innerHTML=""
-      
-     }, 100);
-    
-  })
-})
-detailcon.addEventListener("mouseenter",()=>{
-  clearTimeout(timer);
-  
-})
-detailcon.addEventListener("mouseleave",()=>{
-  detailcon.classList.remove("detailoptions2")
-     detailcon.innerHTML=""
-  
-
-})
-
+scrollTop()
+showDetailOptions()
 
 
   
@@ -317,10 +266,10 @@ async function a(){
  await caller()
   
   
-  console.log("before canvasshow****************************8888")
+
   let catagoryPage=""
   canvasShow(catagoryPage)
-  console.log("after canvasshow************************")
+
 }
 a()
 

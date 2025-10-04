@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SingleMind News</title>
   <link rel="stylesheet" href="style.css" />
+   <link rel="stylesheet" href="./commoncss.css">
  
 </head>
 <body>
@@ -96,6 +97,7 @@
 
         </main>
         <div class="showlink" >this is your link.........</div>
+          <button id="scrollTopBtn">⬆ Top</button>
 
         <footer>
           <p>&copy; 2025 SingleMind News. All rights reserved.</p>
@@ -131,75 +133,21 @@
         catagoryNewsFunc,
         getKeywords,
         canvasShow,
+        scrollTop,
+        showDetailOptions,
         } from './commonscript.js'
 const  loggedInUser = localStorage.getItem("loggedInUser");
 const catagoryPage=localStorage.getItem("catagory")
 const catagoryPageType=localStorage.getItem("catagoryType")
 logoutButtonPressed()
+scrollTop()
 //detailopton******************************************starts
-let detailcon=document.querySelector(".detailoptions")
-let ul=document.querySelector(".detailoptions ul")
-let texthover=document.querySelectorAll(".navbar ul li a")
-let timer;
-texthover.forEach(ele=>{
-  ele.addEventListener("mouseenter",async event=>{
-    
-   clearTimeout(timer)
-    detailcon.innerHTML=""
-
-    detailcon.classList.add("detailoptions2")
-   
-    // console.log("this is eleemnt ",ele.textContent.toLocaleLowerCase())
-    let l=ele.textContent.toLocaleLowerCase()
-    const matchArrayDetailList=await getKeywords(l)
-    console.log("matchArrayDetailList is ",matchArrayDetailList)
-      matchArrayDetailList.forEach(ele=>{
-        // console.log("element is inserting: ",ele)
-      let li=document.createElement("li")
-     li.classList.add("list_detail")
-     li.innerHTML=`<a href="#" onclick='moduleNews("narrow","${ele}")'>${ele}</a>`
-     detailcon.appendChild(li)
-     
-      })
-
-
-  })
-   ele.addEventListener("mouseleave",event=>{
-    
-     timer=setTimeout(() => {
-      console.log("Event is : ",event)
-     detailcon.classList.remove("detailoptions2")
-     detailcon.innerHTML=""
-      
-     }, 100);
-    
-  })
-})
-detailcon.addEventListener("mouseenter",()=>{
-  clearTimeout(timer);
-  
-})
-detailcon.addEventListener("mouseleave",()=>{
-  detailcon.classList.remove("detailoptions2")
-     detailcon.innerHTML=""
-  
-
-})
-
+showDetailOptions()
 //detailopton******************************************ends
 
 
 
-
-
-
-
-
-
-
-
-
-
+//***************************catagoryPage code starts*****************************
 const matchArray=await getKeywords(catagoryPage)
 // console.log("match array",matchArray)
 

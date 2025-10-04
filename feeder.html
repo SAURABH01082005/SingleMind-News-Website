@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SingleMind Admin</title>
+<title>SingleMind Feeder</title>
+ 
 <style>
     body {
         font-family: Arial, sans-serif;
@@ -11,6 +12,8 @@
         color: white;
         margin: 0;
         padding: 0;
+        display: flex;
+        flex-direction: column;
     }
 
     header {
@@ -122,10 +125,11 @@
         background: darkred;
     }
 </style>
+<link rel="stylesheet" href="./commoncss.css">
 </head>
 <body>
 
-<header>SingleMind News - Admin Panel</header>
+<header>SingleMind News - Feeder Panel</header>
 
 <main>
     <h2>Add New Data</h2>
@@ -154,12 +158,19 @@
         </div>
     </div>
 </main>
+<button id="scrollTopBtn">⬆ Top</button>
+<footer>
+<p>&copy; 2025 SingleMind News. All rights reserved.</p>
+</footer>
 
 <script type="module">
     // const  loggedInUser = localStorage.getItem("loggedInUser");
 // const loggedInUser="manoj"
 const loggedInUser=localStorage.getItem("loggedInUser");
 console.log("checking session ",loggedInUser)
+
+import {scrollTop} from './commonscript.js'
+scrollTop()
 
 
   //**********************************firebase sdks ****************************************
