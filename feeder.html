@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SingleMind Feeder</title>
- 
+ <link rel="stylesheet" href="./commoncss.css">
 <style>
     body {
         font-family: Arial, sans-serif;
@@ -124,12 +124,17 @@
     .delete-btn:hover {
         background: darkred;
     }
+
+    main{
+        min-width: 800px;
+    }
+
 </style>
-<link rel="stylesheet" href="./commoncss.css">
 </head>
 <body>
 
-<header>SingleMind News - Feeder Panel</header>
+<div class="content-wrapper">
+    <header>SingleMind News - Feeder Panel</header>
 
 <main>
     <h2>Add New Data</h2>
@@ -162,6 +167,7 @@
 <footer>
 <p>&copy; 2025 SingleMind News. All rights reserved.</p>
 </footer>
+</div>
 
 <script type="module">
     // const  loggedInUser = localStorage.getItem("loggedInUser");
@@ -169,7 +175,9 @@
 const loggedInUser=localStorage.getItem("loggedInUser");
 console.log("checking session ",loggedInUser)
 
-import {scrollTop} from './commonscript.js'
+import {scrollTop,
+        readData,
+        } from './commonscript.js'
 scrollTop()
 
 
@@ -268,9 +276,8 @@ async function removeItem(item) {
 async function  loadData(){
 
     dataItem.innerHTML=""
-     const docRef = doc(db, "users", loggedInUser);
-     const docSnap = await getDoc(docRef);
-     const urlArray=docSnap.data().urls
+     const urlArray=await readData("urls",db,loggedInUser)
+     if(!urlArray) return;
      urlArray.forEach(element => {
         renderItem(element)
      });

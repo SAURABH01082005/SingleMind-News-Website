@@ -36,7 +36,7 @@ html, body {
       background-color: #0056b3;
     }
 
-    /* Footer */
+    /* Footer and all under must be .content-wrapper */
 footer {
   margin-top: auto;
   width: 100%;
@@ -49,4 +49,9 @@ footer {
     justify-content: center;
     align-items: center;
   
+}
+   .content-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }

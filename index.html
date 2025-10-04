@@ -184,6 +184,7 @@ const k= await readData("urls",db,loggedInUser).catch(err =>{console.log("there 
     let count=0;
     let rssUrl;
     // console.log("urlArray is ; ",urlArray.length)
+    if(!urlArray) return;
     for(count=0;count<urlArray.length;count++){
       
     rssUrl = urlArray[count].url;
