@@ -214,7 +214,11 @@ import {
 async function deleteAccount(event){
   const docRef=doc(db,"users",loggedInUser)
   try{
-    console.log("**************888testing*************88")
+    
+    if(loggedInUser=="manoj"){
+       alert("sorry this account is restricted!")
+       return;
+    }
     await deleteDoc(docRef)
     alert("Account Deleted and Logout Succesfully")
     localStorage.clear();
