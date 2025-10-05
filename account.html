@@ -301,11 +301,9 @@ bookmarks.forEach(async k => {
 
 }
 
-async function a(){
-  await caller()
-  console.log("*****************888testing*******************")
-  let catagoryPage="mybookmarks"
-  canvasShow(catagoryPage)
+ function a(){
+  canvasShow('loading')
+  caller().then(()=>{canvasShow("bookmarks")}).catch((err)=>{console.log("error occured!")})
 }
 a()
  const tableBody = document.querySelector("tbody");

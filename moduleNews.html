@@ -207,41 +207,33 @@ import {
 //**************fetching data rss**************
 
 async function caller(params) {
-  const k= await readData("urls",db,loggedInUser);
-console.log("k is ",typeof(k), k)
-
-
+  const urlArray= await readData("urls",db,loggedInUser);
   //step1 use rssUrl ********************************fetching news**************************************
-    let urlArray=k
     let count=0;
     let rssUrl;
     if(!urlArray) return;
 for(count=0;count<urlArray.length;count++){
-      
-    rssUrl = urlArray[count].url;
-
-                   
+    rssUrl = urlArray[count].url;             
   // Step 2: Use rss2json proxy to get JSON data
   const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}&count=10`;
   console.log(apiUrl);
 
   // Fetch the RSS data
+  await fetchFuncModule(apiUrl)
+}
+}
+
+async function fetchFuncModule(apiUrl){
   await fetch(apiUrl)
     .then(response => response.json())//convertin to json
     .then(data => {
-      console.log("data in json format is ",data)//printing data json and no. of items
+      console.log("Each apiUrl data in json format is ",data)//printing data json and no. of items
       console.log(`Total items: ${data.items.length}`);
       const tableBody = document.querySelector('#newsTable tbody');
       //****************************************work to have catagory starts********************
       const link=data.feed.link
          let catagoryNews=catagoryNewsFunc(link)
-         
-    //not using linkArray
-      
-
       //****************************************work to have catagory ends********************
-
-      
       if(checkStatus(catagoryNews.toLowerCase())){
         data.items.forEach(news => {
            let showlinkUrl=news.link;
@@ -277,10 +269,7 @@ for(count=0;count<urlArray.length;count++){
 //adding news link info ends*******************
 //dragging the img---------------------------------starts
 imgDraggingStarts(row,news,link,catagoryNews)
-//dragging the img---------------------------------ends
-
-
-        
+//dragging the img---------------------------------ends  
       });
       }
     })
@@ -288,18 +277,14 @@ imgDraggingStarts(row,news,link,catagoryNews)
       console.error('Error fetching news:', error);
     });
 }
-}
+
 
 imgDraggingStartsRemaining(db,loggedInUser)
-
-async function a(){
- await caller()
-  console.log("before canvasshow****************************8888")
-  canvasShow(catagoryPage)
-  console.log("after canvasshow************************")
+ function a(){
+  canvasShow('loading')
+  caller().then(()=>{canvasShow(catagoryPage)}).catch((err)=>{console.log("error occured!")})
 }
 a()
-
 
 </script>
            

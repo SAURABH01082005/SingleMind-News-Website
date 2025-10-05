@@ -176,14 +176,11 @@ import {
 
 //**************fetching data rss**************
 async function caller() {
-const k= await readData("urls",db,loggedInUser).catch(err =>{console.log("there is error",err)});
-// console.log("k is ",typeof(k), k)
+const urlArray= await readData("urls",db,loggedInUser).catch(err =>{console.log("there is error",err)});
 
   //step1 use rssUrl ********************************fetching news**************************************
-    let urlArray=k
     let count=0;
     let rssUrl;
-    // console.log("urlArray is ; ",urlArray.length)
     if(!urlArray) return;
     for(count=0;count<urlArray.length;count++){
       
@@ -191,22 +188,23 @@ const k= await readData("urls",db,loggedInUser).catch(err =>{console.log("there 
                    
   // Step 2: Use rss2json proxy to get JSON data
   const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}&count=10`;
-  console.log(apiUrl);
 
   // Fetch the RSS data
+  await fetchFunc(apiUrl)
+  
+}
+}
+async function fetchFunc(apiUrl) {
   await fetch(apiUrl)
     .then(response => response.json())//convertin to json
     .then(data => {
-      console.log("data in json format is ",data)//printing data json and no. of items
+      console.log("Each apiUrl data in json format is ",data)//printing data json and no. of items
+      if(!data.items) return;
       console.log(`Total items: ${data.items.length}`);
       const tableBody = document.querySelector('#newsTable tbody');
       //****************************************work to have catagory starts********************
       const link=data.feed.link
       let catagoryNews=catagoryNewsFunc(link)
-      // console.log("catagory news is : ",catagoryNews)
-    //not using linkArray
-      
-
       //****************************************work to have catagory ends********************
     
       data.items.forEach(news => {
@@ -259,22 +257,14 @@ imgDraggingStarts(row,news,link,catagoryNews)
     });
   
 }
-}
 
 imgDraggingStartsRemaining(db,loggedInUser)
-async function a(){
-
- await caller()
-  
-  
-
-  let catagoryPage=""
-  canvasShow(catagoryPage)
-
+ function a(){
+  let catagoryPage="";
+  canvasShow('loading')
+  caller().then(()=>{canvasShow(catagoryPage)}).catch((err)=>{console.log("error occured!")})
 }
 a()
-
-
 
 </script>
             

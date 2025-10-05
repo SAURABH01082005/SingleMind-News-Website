@@ -121,7 +121,7 @@ try {
   const docSnap = await getDoc(docRef);
 
 if (docSnap.exists()) {
-  console.log("Document data:", docSnap.data());
+  console.log("Database data by readData function :", docSnap.data());
   if(k=='urls') return docSnap.data().urls
   if(k=='bookmarks') return docSnap.data().bookmarks
   
@@ -200,6 +200,7 @@ export function canvasShow(catagoryPage) {
     ctx.shadowBlur = 4;
 
     if(catagoryPage=="mybookmarks") ctx.fillText("Drag and Drop the News to Add in BookMarks!", centerX, startY);
+    else if(catagoryPage=="loading") ctx.fillText(catagoryPage.toUpperCase()+" Data from DataBase!", centerX, startY);
     else ctx.fillText("Add Rss link of "+catagoryPage.toUpperCase()+" news in Feeder!", centerX, startY);
 
     // ---------------- Second line: normal font, subtle shadow ----------------
@@ -233,7 +234,8 @@ export function canvasShow(catagoryPage) {
      //hidding table:
     let table=document.getElementById("newsTable")
   
-    if (!tbody.rows.length) canvas.style.display = "block",  table.style.display="none";
+    if (!tbody.rows.length) canvas.style.display = "block",  table.style.visibility="hidden",console.log("tbody is empty****");
+    else  canvas.style.display = "none",  table.style.visibility="visible",console.log("tbody is full****");
 }
 
 
