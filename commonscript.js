@@ -176,67 +176,87 @@ export function canvasShow(catagoryPage) {
     const canvas = document.getElementById("newsCanvas");
     const ctx = canvas.getContext("2d");
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // clear canvas before drawing
-    ctx.textAlign = "center"; // center text horizontally
-    ctx.textBaseline = "top"; // aligns text from top
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
 
     const centerX = canvas.width / 2;
     let startY = 50;
     const lineHeight = 50;
 
-    // ---------------- First line: italic, bold, gradient, shadow ----------------
-    ctx.font = "italic bold 28px Segoe UI";
+    // ---------- Stylish Background Shape ----------
+    const shapeGradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    shapeGradient.addColorStop(0, "#0D1B2A");
+    shapeGradient.addColorStop(0.5, "#1B263B");
+    shapeGradient.addColorStop(1, "#415A77");
 
-    // Create gradient
-    const gradient1 = ctx.createLinearGradient(0, startY, canvas.width, startY + 30);
-    gradient1.addColorStop(0, "#ff7f50"); // coral
-    gradient1.addColorStop(1, "#ff1493"); // deep pink
-    ctx.fillStyle = gradient1;
+    ctx.fillStyle = shapeGradient;
+    ctx.beginPath();
 
-    // Add shadow
+    // Create a soft wave / blob-like shape
+    ctx.moveTo(0, canvas.height * 0.3);
+    ctx.bezierCurveTo(canvas.width * 0.25, canvas.height * 0.15, canvas.width * 0.75, canvas.height * 0.45, canvas.width, canvas.height * 0.3);
+    ctx.lineTo(canvas.width, canvas.height);
+    ctx.lineTo(0, canvas.height);
+    ctx.closePath();
+
+    ctx.shadowColor = "rgba(0,0,0,0.4)";
+    ctx.shadowBlur = 20;
+    ctx.fill();
+
+    // ---------- First line: bold gradient title ----------
     ctx.shadowColor = "rgba(0,0,0,0.3)";
     ctx.shadowOffsetX = 2;
     ctx.shadowOffsetY = 2;
     ctx.shadowBlur = 4;
 
-    if(catagoryPage=="mybookmarks") ctx.fillText("Drag and Drop the News to Add in BookMarks!", centerX, startY);
-    else if(catagoryPage=="loading") ctx.fillText(catagoryPage.toUpperCase()+" Data from DataBase!", centerX, startY);
-    else ctx.fillText("Add Rss link of "+catagoryPage.toUpperCase()+" news in Feeder!", centerX, startY);
+    ctx.font = "italic bold 28px Segoe UI";
+    const gradient1 = ctx.createLinearGradient(0, startY, canvas.width, startY + 30);
+    gradient1.addColorStop(0, "#ff7f50");
+    gradient1.addColorStop(1, "#ff1493");
+    ctx.fillStyle = gradient1;
 
-    // ---------------- Second line: normal font, subtle shadow ----------------
+    if (catagoryPage == "mybookmarks")
+        ctx.fillText("Drag and Drop the News to Add in BookMarks!", centerX, startY);
+    else if (catagoryPage == "loading")
+        ctx.fillText(catagoryPage.toUpperCase() + " Data from DataBase!", centerX, startY);
+    else
+        ctx.fillText("Add RSS link of " + catagoryPage.toUpperCase() + " news in Feeder!", centerX, startY);
+
+    // ---------- Second line ----------
     startY += lineHeight;
     ctx.font = "24px Segoe UI";
-    ctx.fillStyle = "#333"; // dark gray
+    ctx.fillStyle = "#E0E1DD";
     ctx.shadowColor = "rgba(0,0,0,0.2)";
     ctx.shadowOffsetX = 1;
     ctx.shadowOffsetY = 1;
     ctx.shadowBlur = 2;
-
     ctx.fillText("Welcome to SingleMind News!", centerX, startY);
 
-    // ---------------- Third line: red gradient with shadow ----------------
+    // ---------- Third line ----------
     startY += lineHeight;
     ctx.font = "22px Segoe UI";
     const gradient2 = ctx.createLinearGradient(0, startY, canvas.width, startY + 30);
     gradient2.addColorStop(0, "#ff0000");
     gradient2.addColorStop(1, "#ff4500");
     ctx.fillStyle = gradient2;
-
     ctx.shadowColor = "rgba(0,0,0,0.3)";
-    ctx.shadowOffsetX = 1;
-    ctx.shadowOffsetY = 1;
     ctx.shadowBlur = 3;
-
     ctx.fillText("No Ads. No Distractions. Just News.", centerX, startY);
 
-    // Show canvas if table is empty
+    // ---------- Visibility control ----------
     const tbody = document.querySelector("#newsTable tbody");
-     //hidding table:
-    let table=document.getElementById("newsTable")
-  
-    if (!tbody.rows.length) canvas.style.display = "block",  table.style.visibility="hidden",console.log("tbody is empty****");
-    else  canvas.style.display = "none",  table.style.visibility="visible",console.log("tbody is full****");
+    const table = document.getElementById("newsTable");
+
+    if (!tbody.rows.length) {
+        canvas.style.display = "block";
+        table.style.visibility = "hidden";
+    } else {
+        canvas.style.display = "none";
+        table.style.visibility = "visible";
+    }
 }
+
 
 
 export function scrollTop(){

@@ -1,4 +1,12 @@
-
+:root{
+  --primaryHeader: #0D1B2A;
+  /* --primaryBackground:linear-gradient(to right, #ffff, #194A8D); #0D1B2A*/
+  --primaryBackground:linear-gradient(to right, #1F4645, #2C6CA6);
+  --textNavbar:#194a8d;
+  --textNavbar2:#2060ba;
+  --mahendi:#1F4645;
+  --rowhover: #fff0c2;
+}
 body {
   font-family: 'Segoe UI', sans-serif;
   background-color: #f9f9fb;
@@ -7,7 +15,7 @@ body {
 
 /* Header */
 header {
-  background-color: #0D1B2A;
+  background-color:var(--primaryHeader);
   height: 150px;
   color: white;
   display: flex;
@@ -23,7 +31,7 @@ header img{
 
 /* header */
 .content-wrapper {
-  background: linear-gradient(to right, #ffff, #194A8D);
+  background: var(--primaryBackground);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -48,7 +56,7 @@ header img{
 
 .navbar a{
   text-decoration: none; 
-  color: #194a8d;
+  color:var(--textNavbar);
   padding-bottom: 30px;
   
   padding-left: 50px;
@@ -59,7 +67,7 @@ header img{
 }
 
 .navbar a:hover {
-  color: #2060ba;
+  color: var(--textNavbar2);
   cursor: pointer;
 }
 ul{
@@ -90,7 +98,7 @@ header  .brain{
 
 header  .brain p{
   padding-right: 8px;
-  color: #1F4645;
+  color: var(--mahendi);
     font-size: 1.2rem;
   font-family: 'Montserrat', sans-serif;
   font-weight: bold;
@@ -173,7 +181,7 @@ main {
   margin: 2rem auto;
   border-radius: 12px;
   background-color: #fff4cc;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);
 }
 
 /* Table Wrapper */
@@ -218,7 +226,7 @@ main {
 }
 
 #newsTable tbody tr:hover {
-  background-color: #fff0c2;
+  background-color: var(--rowhover);
   transition: background-color 0.2s ease-in-out;
 }
 
